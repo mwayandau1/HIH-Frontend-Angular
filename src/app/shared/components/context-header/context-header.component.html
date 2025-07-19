@@ -1,0 +1,21 @@
+<div class="flex justify-between items-center">
+  <div class="text-typo-primary flex items-center gap-4">
+    <div class="h-[2.5rem] w-[2.5rem] rounded-md bg-primary flex justify-center items-center">
+      <img [src]="icon()" [alt]="title() + ' icon'" [style]="getIconStyle()" />
+    </div>
+    <div class="flex flex-col justify-center">
+      <h2 class="text-[1.25rem]">{{ title() }}</h2>
+      <p class="text-sm">{{ subtitle() }}</p>
+    </div>
+  </div>
+
+  <ng-container *ngIf="contextButtonText()">
+    <app-button
+      (clickEvent)="contextButtonAction.emit($event)"
+      title="context-button"
+      [variant]="contextButtonVarient()"
+    >
+      {{ contextButtonText() }}
+    </app-button>
+  </ng-container>
+</div>

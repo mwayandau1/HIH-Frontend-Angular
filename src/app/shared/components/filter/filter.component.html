@@ -1,0 +1,75 @@
+<div class="relative w-full">
+  <div class="flex relative border border-primary rounded-md">
+    <button
+      class="flex w-full items-center gap-1.5 px-3 py-3 bg-bg cursor-pointer border-none rounded-md transition-colors text-sm"
+      [class.bg-gray-100]="isDropdownOpen()"
+      (click)="toggleDropdown()"
+    >
+      <span class="flex w-full justify-between items-center">
+        <lucide-icon [img]="icons.Funnel" [size]="20" color="#69533F" />
+        <p>{{ selectedOption() || 'Filters' }}</p>
+
+        <div
+          class="transform transition-transform duration-200"
+          [class.rotate-180]="isDropdownOpen()"
+        >
+          <lucide-icon [img]="icons.ChevronDown" [size]="18" color="#69533F" />
+        </div>
+      </span>
+    </button>
+  </div>
+
+  <div
+    class="absolute top-full left-0 right-0 bg-bg border-primary border-t-0 rounded-b shadow-lg z-40 transition-all duration-300"
+    [class.max-h-0]="!isDropdownOpen()"
+    [class.max-h-96]="isDropdownOpen()"
+    [class.hidden]="!isDropdownOpen()"
+  >
+    @for (section of computedFilterOptions(); track $index) {
+      <div class="border-b border-gray-100 last:border-b-0 px-2 relative">
+        <button
+          class="w-full flex justify-between items-center py-2 border-b-2 border-b-primary bg-transparent cursor-pointer text-sm text-gray-800 text-left hover:bg-gray-50 transition-colors"
+          (click)="toggleSection(section.id)"
+          [class.border-b-0]="$last"
+        >
+          <div
+            class="font-medium p-4 w-full rounded-xl flex justify-between items-center"
+            [class.bg-primary]="section.expanded"
+          >
+            <span>{{ section.label }}</span>
+            <lucide-icon [img]="icons.ChevronRight" [size]="18" color="#69533f" />
+          </div>
+        </button>
+
+        <div
+          class="transition-all duration-300 absolute bg-bg top-0 right-[105%] z-50 w-40 rounded-lg shadow-xl flex flex-col justify-center"
+          [class.hidden]="!section.expanded"
+        >
+          @for (option of section.children; track $index) {
+            <button
+              class="flex justify-center items-center px-2 bg-bg cursor-pointer text-sm hover:bg-gray-50 transition-colors"
+              (click)="selectOption(option, section.label)"
+            >
+              <div
+                class="border-b-2 border-b-primary px-4 py-6 flex items-center w-full"
+                [class.border-b-0]="$last"
+              >
+                <p>{{ option.label }}</p>
+              </div>
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
+
+<button (click)="toggleDropdown(false)" class="absolute">
+  <div
+    class="fixed inset-0 z-30 transition-opacity duration-200"
+    [class.opacity-0]="!isDropdownOpen()"
+    [class.opacity-100]="isDropdownOpen()"
+    [class.pointer-events-none]="!isDropdownOpen()"
+    [class.pointer-events-auto]="isDropdownOpen()"
+  ></div>
+</button>

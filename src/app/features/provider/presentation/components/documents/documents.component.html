@@ -1,0 +1,64 @@
+<div class="flex flex-col border border-primary rounded-xl py-6 px-5 gap-10">
+  <div class="flex justify-between">
+    <div class="flex flex-col">
+      <h2 class="text-xl">Patient Documents</h2>
+      <p class="text-sm">View and manage uploaded documents and images</p>
+    </div>
+    <label
+      for="file-upload"
+      class="flex items-center justify-center gap-1 py-2 px-6 rounded-lg transition-all duration-200 bg-primary text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+      [class.opacity-50]="uploading()"
+      [class.cursor-not-allowed]="uploading()"
+    >
+      @if (!uploading()) {
+        <img src="./images/uploadfile.svg" alt="file-upload-button" />
+      } @else {
+        <svg
+          class="animate-spin h-5 w-5 text-black"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8h4z"
+          ></path>
+        </svg>
+      }
+
+      <span class="text-tab-secondary-active-typo">
+        {{ uploading() ? 'Uploading' : 'Upload File' }}
+      </span>
+
+      <input
+        type="file"
+        id="file-upload"
+        class="hidden"
+        (change)="onFileChange($event)"
+        [disabled]="uploading()"
+      />
+    </label>
+  </div>
+  @if (loading()) {
+    <div class="flex flex-wrap w-full gap-5 justify-center">
+      @for (card of [1, 2, 3]; track card) {
+        <app-card-skelecton />
+      }
+    </div>
+  } @else {
+    <div class="flex flex-wrap w-full gap-6 justify-center items-center">
+      @for (document of documents(); track document.id) {
+        <app-documents-card [document]="document" />
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,11 @@
+<section class="flex flex-col gap-6">
+  <div class="flex justify-between items-stretch">
+    <app-patient-information [patient]="patient()" class="w-[57.5%]" />
+    <app-patient-vitals [vitals]="patient().vitals" class="w-[37.5%]" />
+  </div>
+  <div class="flex justify-between items-stretch">
+    <app-patient-medications [medications]="patient().medications" class="w-[47.5%]" />
+    <app-patient-lab-results [labResults]="patient().labResults" class="w-[47.5%]" />
+  </div>
+  <app-patient-recent-visits [visits]="patient().visits" />
+</section>

@@ -1,0 +1,46 @@
+<div
+  [ngClass]="[className()]"
+  class="flex flex-col justify-start text-primary-black text-sm items-start gap-1 relative my-2"
+>
+  @if (hasIcon()) {
+    <div
+      class="absolute flex items-center justify-center"
+      [class]="
+        (iconPosition() === 'left' ? 'left-4' : 'right-4') +
+        ' ' +
+        (label() ? 'top-[2.4rem]' : 'top-[1.25rem]')
+      "
+    >
+      <ng-content></ng-content>
+    </div>
+  }
+
+  <label [for]="id()" class="block" [class]="isDisabled() ? 'opacity-50' : ''">
+    {{ label() }}
+    @if (required()) {
+      <span class="text-red-700">*</span>
+    }
+  </label>
+
+  <input
+    [id]="id()"
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [formControl]="control()"
+    [class.pl-10]="hasIcon() && iconPosition() === 'left'"
+    [class.pr-10]="hasIcon() && iconPosition() === 'right'"
+    [class.rounded-r-none]="isForChatBox()"
+    (blur)="inputBlur.emit($event)"
+    (keydown)="handleyKeyEvent($event)"
+    class="px-3 border h-12 block w-full rounded-lg border-primary shadow-sm outline-none placeholder:text-typo-primary"
+    [ngClass]="{
+      'border-red-400': !!errorMessage(),
+      'border-primary': !errorMessage(),
+      'bg-gray-100 cursor-not-allowed opacity-50': isDisabled(),
+    }"
+  />
+
+  @if (!!errorMessage()) {
+    <span class="text-xs mt-1 text-red-700 text-left">{{ errorMessage() }}</span>
+  }
+</div>

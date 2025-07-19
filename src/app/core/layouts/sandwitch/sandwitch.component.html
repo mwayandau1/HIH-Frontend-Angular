@@ -1,0 +1,18 @@
+<app-header />
+<div class="px-4 md:px-10 lg:px-16 py-3 flex flex-col">
+  <div class="flex flex-col gap-2 mb-2">
+    <h1 class="text-2xl md:text-3xl font-bold text-typo-active">Patient Healthcare Dashboard</h1>
+    <p class="text-sm text-primary-black">Manage your health records, appointments and more</p>
+  </div>
+  @if (currentUrl() !== 'patient') {
+    <ul class="text-sm flex items-center gap-2 mt-4">
+      <li class="cursor-pointer"><a routerLink="/patient">Dashboard</a></li>
+      <li><lucide-icon [img]="icons.ChevronRight" [size]="18" color="#69533f" /></li>
+      <li>
+        <p class="font-bold">{{ currentUrl() | titlecase }}</p>
+      </li>
+    </ul>
+  }
+</div>
+<router-outlet />
+<app-footer />

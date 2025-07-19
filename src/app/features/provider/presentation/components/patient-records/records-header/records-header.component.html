@@ -1,0 +1,13 @@
+<ul class="flex items-center gap-2 text-sm p-[1.25rem]">
+  <li>
+    <a routerLink="/provider/patients">Patient Search</a>
+  </li>
+  <lucide-icon [img]="icons.ChevronRight" size="15" color="#69533F" />
+  <li>
+    <a [routerLink]="['/provider/patients', patientId()]"> Records </a>
+  </li>
+  <lucide-icon [img]="icons.ChevronRight" size="15" color="#69533F" />
+  <li>
+    <p class="font-bold">{{ page() }}</p>
+  </li>
+</ul>

@@ -1,0 +1,30 @@
+<div class="border border-primary rounded-md mt-6 w-full h-fit">
+  <app-list-container
+    icon="/images/visits-icon.svg"
+    title="Recent Visits"
+    contextButtonText="All Visits"
+    (contextButtonAction)="tabsService.setActiveTab(2)"
+  >
+    @if (visits().length === 0) {
+      <div class="flex justify-center items-center mt-2">
+        <h4 class="text-lg">No Visits History</h4>
+      </div>
+    } @else {
+      @for (visit of visits().slice(0, 2); track $index) {
+        <div
+          class="flex justify-between items-center border-primary pt-7"
+          [class.border-t]="!$first"
+        >
+          <div class="flex flex-col gap-1 w-[85%]">
+            <p>{{ visit.purpose }}</p>
+            <p>Provider: {{ visit.providerName }}</p>
+            <p class="self-start text-sm whitespace-nowrap overflow-hidden text-ellipsis w-full">
+              {{ visit.notes }}
+            </p>
+          </div>
+          <p>{{ visit.visitDate | date: 'MMM d, y' }}</p>
+        </div>
+      }
+    }
+  </app-list-container>
+</div>

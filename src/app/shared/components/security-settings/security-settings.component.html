@@ -1,0 +1,93 @@
+<form class="border border-primary rounded-md p-4 pt-6" [formGroup]="passwordForm">
+  <app-settings-heading
+    title="Password & Authentication"
+    description="Update your password and security settings"
+    [icon]="icons.Lock"
+  />
+
+  <div>
+    @for (control of passwordFormArray(); track $index) {
+      <app-input
+        [id]="control[0]"
+        [label]="formatCamelCase(control[0])"
+        [type]="isPasswordVisible().at($index) ? 'text' : 'password'"
+        [hasIcon]="true"
+        [control]="control[1]"
+        iconPosition="right"
+        [errorMessage]="checkFieldErrors(passwordForm, control[0]) ?? ''"
+      >
+        <app-button
+          [title]="isPasswordVisible().at($index) ? 'Hide Password' : 'View Password'"
+          variant="tertiary"
+          customStyles="!p-0"
+          (clickEvent)="handlePasswordVisibility($index)"
+          ><lucide-icon
+            [img]="isPasswordVisible().at($index) ? icons.Eye : icons.EyeClosed"
+            [size]="18"
+            color="#69533f"
+        /></app-button>
+      </app-input>
+      @if (control[0] === 'newPassword') {
+        <p class="text-left my-3 text-[.7rem] md:text-xs">
+          Password must be at least 8 characters long and include at least one uppercase letter, one
+          lowercase letter, one number, and one special character.
+        </p>
+      }
+    }
+  </div>
+
+  <app-button
+    title="Update Password"
+    customStyles="justify-center align-item flex"
+    [disabled]="passwordForm.invalid || isUpdatingPassword()"
+    (clickEvent)="handlChangePassword()"
+  >
+    @if (isUpdatingPassword()) {
+      <app-loader />
+    } @else {
+      <p>Update Password</p>
+    }
+  </app-button>
+</form>
+
+<form class="border border-primary rounded-md p-4 pt-6 mt-3" [formGroup]="mfaForm">
+  <app-settings-heading title="Two-Factor Authentication" />
+
+  @for (control of mfaFormArray(); track $index) {
+    <div
+      class="flex items-center justify-between mb-4"
+      [class]="!mfaForm.controls.enableMFA.value && $index > 0 ? 'opacity-50' : ''"
+    >
+      <div>
+        <h6 class="font-bold">{{ mfaMethods[$index].name }}</h6>
+        <p class="text-sm">{{ mfaMethods[$index].description }}</p>
+      </div>
+      <app-slide-toggle [formControl]="control[1]" />
+    </div>
+  }
+
+  <div class="flex items-center justify-between md:justify-end gap-4 mt-6 md:mt-4">
+    <app-button
+      title="Cancel"
+      variant="secondary"
+      class="w-[40%] min-w-fit md:w-40"
+      customStyles="w-full text-sm md:text-base"
+      (clickEvent)="handleCancel()"
+      [disabled]="!mfaForm.dirty"
+      >Cancel</app-button
+    >
+    <app-button
+      title="Save Changes"
+      class="w-[40%]"
+      customStyles="w-full text-sm md:text-base justify-center align-item flex"
+      [disabled]="mfaForm.invalid || isUpdatingMfa()"
+      (clickEvent)="handleSavePreference()"
+    >
+      @if (isUpdatingMfa()) {
+        <app-loader />
+      } @else {
+        <p>Save Preferences</p>
+      }
+    </app-button>
+  </div>
+</form>

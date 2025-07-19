@@ -1,0 +1,19 @@
+<div class="border border-primary rounded-md mt-6 w-full h-full">
+  <app-list-container
+    icon="/images/medications-icon.svg"
+    title="Current Medications"
+    contextButtonText="Add"
+  >
+    @for (medication of medications().slice(0, 3); track $index) {
+      <div class="flex justify-between items-center border-primary pt-7" [class.border-t]="!$first">
+        <div>
+          <p>
+            {{ medication.medicationName }} <span>{{ medication.dosage }}</span>
+          </p>
+          <p class="text-xs">Started: {{ medication.startDate | date: 'MMM d, y' }}</p>
+        </div>
+        <p class="self-start text-sm">{{ medication.frequency }}</p>
+      </div>
+    }
+  </app-list-container>
+</div>

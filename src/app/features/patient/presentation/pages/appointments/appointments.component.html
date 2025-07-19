@@ -1,0 +1,180 @@
+<main class="px-4 md:px-10 lg:px-16 py-3 flex flex-col">
+  <div class="flex justify-between w-full">
+    <div class="flex gap-2 justify-center items-center">
+      <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
+        <img src="/images/appointment.svg" alt="cardicon" />
+      </div>
+      <h2 class="md:font-bold lg:text-xl">Appointments</h2>
+    </div>
+    <app-dropdown
+      [options]="dropdownOptions"
+      (itemSelected)="onFilterSelected($event)"
+    ></app-dropdown>
+  </div>
+
+  <div class="flex flex-col gap-4 mt-4">
+    <div class="overflow-x-auto">
+      <table class="w-full" aria-label="Roles and Permissions" aria-describedby="roles-description">
+        <thead class="bg-tertiary-black text-gray-700">
+          <tr>
+            <th class="md:px-6 px-3 py-3 text-left text-sm font-medium">Doctor Name</th>
+            <th class="md:px-6 px-3 py-3 text-left text-sm font-medium hidden md:table-cell">
+              Date
+            </th>
+            <th class="md:px-6 px-3 py-3 text-left text-sm font-medium hidden md:table-cell">
+              Time
+            </th>
+            <th class="md:px-6 px-3 py-3 text-left text-sm font-medium">Status</th>
+            <th class="md:px-6 px-3 py-3 text-left text-sm font-medium">Action</th>
+          </tr>
+        </thead>
+        @if (loading()) {
+          <tbody>
+            <tr>
+              <td colspan="6">
+                <div class="flex justify-center items-center py-16">
+                  <app-loader></app-loader>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        } @else {
+          @if (appointments().length > 0) {
+            <tbody>
+              @for (appointment of appointments(); track $index) {
+                <tr class="hover:bg-gray-50 cursor-pointer">
+                  <td class="md:px-6 px-3 py-4 whitespace-nowrap">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ appointment.providerName }}
+                    </div>
+                  </td>
+
+                  <td class="md:px-6 px-3 py-4 whitespace-nowrap hidden md:table-cell">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ appointment.visitDate | date: 'MMMM d, y' }}
+                    </div>
+                  </td>
+                  <td class="md:px-6 px-3 py-4 whitespace-nowrap hidden md:table-cell">
+                    <div class="text-sm font-medium text-gray-900">
+                      {{ appointment.visitDate | date: 'shortTime' }}
+                    </div>
+                  </td>
+                  <td class="md:px-6 px-3 py-4 whitespace-nowrap">
+                    <span
+                      [class]="
+                        'w-20 h-8 flex text-center border justify-center items-center rounded-full text-xs font-medium ' +
+                        (appointment.status === 'SCHEDULED'
+                          ? 'bg-green-100 text-green-800 border-green-300'
+                          : appointment.status === 'CANCELLED'
+                            ? 'bg-red-100 text-red-800 border-red-300'
+                            : appointment.status === 'IN_PROGRESS'
+                              ? 'bg-yellow-100 text-yellow-800 border-yellow-300'
+                              : 'bg-gray-100 text-gray-800 border-gray-300')
+                      "
+                    >
+                      {{
+                        appointment.status === 'SCHEDULED'
+                          ? 'Upcoming'
+                          : appointment.status === 'CANCELLED'
+                            ? 'Cancelled'
+                            : appointment.status === 'IN_PROGRESS'
+                              ? 'In Progress'
+                              : 'Completed'
+                      }}
+                    </span>
+                  </td>
+                  <td class="md:px-6 px-3 py-4 relative">
+                    <button
+                      class="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                      (click)="toggleAppointmentModal(appointment.id, $event)"
+                    >
+                      <svg
+                        class="h-5 w-5"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+                        />
+                      </svg>
+                    </button>
+
+                    @if (openModalAppointmentId === appointment.id) {
+                      <div
+                        [ngClass]="
+                          appointments().length < 2
+                            ? 'origin-top-right top-0'
+                            : isLastOrSecondToLast($index)
+                              ? 'origin-bottom-right !bottom-16'
+                              : 'origin-top-right'
+                        "
+                        class="absolute right-0 z-20 mt-2 w-60 rounded-md bg-white shadow-lg flex flex-col p-0"
+                      >
+                        <div class="px-5 pt-4 pb-2 border-b border-gray-200 md:hidden">
+                          <div class="text-base font-medium text-gray-800">
+                            {{ appointment.visitDate | date: 'MMMM d, y h:mm a' }}
+                          </div>
+                        </div>
+                        <button
+                          class="block w-full px-5 py-3 text-left text-base text-gray-700 hover:bg-gray-100 border-b border-primary"
+                          (click)="messageDoctor(appointment.providerId ?? '')"
+                          [disabled]="actionLoading[appointment.id]"
+                        >
+                          Message Doctor
+                        </button>
+
+                        @for (action of getAppointmentActions(appointment.status); track $index) {
+                          <button
+                            class="w-full px-5 py-3 text-left text-base font-medium flex items-center gap-2 hover:bg-gray-100"
+                            [ngClass]="[
+                              action.color,
+                              isActionLoading(appointment.id, action.status)
+                                ? 'opacity-50 cursor-not-allowed'
+                                : '',
+                              $index > 0 ? 'border-t border-gray-200' : '',
+                            ]"
+                            (click)="
+                              handleAppointmentAction(appointment, action); $event.stopPropagation()
+                            "
+                            [disabled]="isActionLoading(appointment.id, action.status)"
+                          >
+                            <span>{{ action.label }}</span>
+                            @if (isActionLoading(appointment.id, action.status)) {
+                              <app-loader class="h-4 w-4" />
+                            }
+                          </button>
+                        }
+                      </div>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          } @else {
+            <tbody>
+              <tr>
+                <td colspan="6" class="text-center">
+                  <div class="w-full flex-col flex justify-center items-center gap-4 py-8">
+                    <img src="./images/no-data.png" alt="no data" />
+                    <p class="text-typo-primary nodata">No Data Found</p>
+                    <app-button title="Retry" variant="secondary" (clickEvent)="getAppointments()">
+                      Retry
+                    </app-button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          }
+        }
+      </table>
+      @if (appointments().length > 0) {
+        <app-pagination
+          [totalRecords]="totalRecords()"
+          [numOfPages]="numOfPages()"
+          [amountOnDisplay]="appointments().length"
+        />
+      }
+    </div>
+  </div>
+</main>

@@ -1,0 +1,37 @@
+<div class="fixed top-4 right-4 bg-white rounded-lg shadow-xl p-6 max-w-sm animate-slide-in z-50">
+  <div class="flex items-center gap-4 mb-4">
+    <div
+      class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white font-bold"
+    >
+      {{ getInitials(callerName()) }}
+    </div>
+    <div>
+      <h4 class="font-semibold">{{ callerName() }}</h4>
+      <p class="text-sm text-gray-600">Incoming {{ isVideoCall() ? 'video' : 'voice' }} call...</p>
+    </div>
+    <lucide-icon
+      [img]="isVideoCall() ? icons.Video : icons.Phone"
+      [size]="24"
+      class="text-primary animate-pulse"
+    />
+  </div>
+
+  <div class="flex gap-2">
+    <app-button
+      title="Accept Call"
+      variant="primary"
+      customStyles="flex-1"
+      (clickEvent)="accept.emit()"
+    >
+      Accept
+    </app-button>
+    <app-button
+      title="Decline Call"
+      variant="secondary"
+      customStyles="flex-1"
+      (clickEvent)="decline.emit()"
+    >
+      Decline
+    </app-button>
+  </div>
+</div>

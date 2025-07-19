@@ -1,0 +1,110 @@
+<app-list-container
+  [noData]="filteredVitals().length === 0"
+  icon="./images/vitals.svg"
+  title="Vitals History"
+  subtitle="Track vital signs over time"
+  primaryButtonText="View all Vitals"
+  primaryButtonVariant="secondary"
+  secondaryButtonText="Record Vitals"
+  secondaryButtonVariant="primary"
+  (secondaryButtonClick)="toggleAddModal()"
+  (primaryButtonClick)="visitAllVitals()"
+  [paginated]="paginated()"
+>
+  <ul class="text-primary-black flex gap-[0.9rem] flex-col">
+    @if (loading()) {
+      <div class="flex flex-col gap-5">
+        @for (skelecton of [1, 2, 3]; track skelecton) {
+          <app-record-skelecton />
+        }
+      </div>
+    } @else if (filteredVitals().length > 0) {
+      @for (result of filteredVitals(); track result.id; let i = $index) {
+        <li
+          class="flex flex-col gap-4 pb-4"
+          [ngClass]="{ 'border-b border-primary': i < filteredVitals().length - 1 }"
+        >
+          <div class="flex justify-between items-center">
+            <div class="flex flex-col">
+              <h2 class="font-bold">Age: {{ result.age }}</h2>
+              <p class="text-sm">Height: {{ result.height }} | Weight: {{ result.weight }}</p>
+              <p class="text-sm">Date: {{ formatDate(result.recordedAt) }}</p>
+            </div>
+            <div class="text-sm text-right">
+              <p>BP: {{ result.bloodPressure }}</p>
+              <p>HR: {{ result.heartRate }}</p>
+              <p>Temp: {{ result.temperature }}°C</p>
+            </div>
+          </div>
+        </li>
+      }
+    } @else {
+      <div class="w-full flex-col flex justify-center items-center gap-4 py-8">
+        <img src="./images/no-data.png" alt="no data" />
+        <p class="text-typo-primary nodata">No Data Found</p>
+      </div>
+    }
+  </ul>
+</app-list-container>
+
+<app-modal
+  [loading]="creating()"
+  [title]="'Add Vitals'"
+  [isOpen]="isAddMedicationModalOpen()"
+  [primaryButtonText]="'Save Vitals'"
+  [secondaryButtonText]="'Cancel'"
+  (primaryButtonClick)="saveChanges()"
+  (secondaryButtonClick)="toggleAddModal()"
+  (closeModal)="toggleAddModal()"
+>
+  <div class="flex flex-col gap-4">
+    <app-input
+      id="height"
+      label="Height (cm)"
+      [required]="true"
+      [control]="height"
+      [errorMessage]="checkFieldErrors(vitalsForm, 'height') ?? ''"
+      placeholder="Enter height"
+    />
+    <app-input
+      id="weight"
+      label="Weight (kg)"
+      [required]="true"
+      [control]="weight"
+      [errorMessage]="checkFieldErrors(vitalsForm, 'weight') ?? ''"
+      placeholder="Enter weight"
+    />
+    <app-input
+      id="age"
+      label="Age"
+      [required]="true"
+      [control]="age"
+      [errorMessage]="checkFieldErrors(vitalsForm, 'age') ?? ''"
+      placeholder="Enter age"
+    />
+    <app-input
+      id="blood-pressure"
+      label="Blood Pressure"
+      [required]="true"
+      [control]="bloodPressure"
+      [errorMessage]="checkFieldErrors(vitalsForm, 'bloodPressure') ?? ''"
+      placeholder="e.g. 120/80"
+    />
+    <app-input
+      id="heart-rate"
+      label="Heart Rate"
+      [required]="true"
+      [control]="heartRate"
+      [errorMessage]="checkFieldErrors(vitalsForm, 'heartRate') ?? ''"
+      placeholder="e.g. 72 bpm"
+    />
+    <app-input
+      id="temperature"
+      label="Temperature (°C)"
+      [required]="true"
+      [control]="temperature"
+      [errorMessage]="checkFieldErrors(vitalsForm, 'temperature') ?? ''"
+      placeholder="e.g. 36.5"
+    />
+  </div>
+</app-modal>

@@ -1,0 +1,71 @@
+import { ToastType } from '@shared/models/toast';
+
+export const toastNotifications = {
+  status: {
+    error: 'error',
+    success: 'success',
+    info: 'info',
+    warning: 'warning',
+  } satisfies Record<string, ToastType>,
+
+  operations: {
+    create: 'Created Successfully',
+    credentialChange: 'Security Update',
+    update: 'Updated Successfully',
+    delete: 'Deleted Successfully',
+    fetch: 'Fetched Successfully',
+    verify: 'Verification Code Sent',
+    send: 'Sent Successfully',
+    fail: 'Operation Failed',
+    success: 'Operation successful',
+    mfa: 'Two Step Authentication',
+    request: 'Request Sent',
+    actionFail: 'Action Failed',
+  },
+  faildOperations: {
+    create: 'Failed to Create',
+    update: 'Failed to Update',
+    delete: 'Failed to Delete',
+    fetch: 'Failed to Fetch',
+    verify: 'Failed to Send Verification Code',
+    send: 'Failed to Send',
+  },
+  messages: {
+    emailSent: 'Check your email for further instructions',
+    invalidToken: 'Invalid token',
+    accountCreated: 'Account created successfully',
+    loginSuccess: 'Login successful',
+    loginFailed: 'Login failed',
+    logoutSuccess: 'Logout successful',
+    profileUpdated: 'Profile updated successfully',
+    settingsUpdated: 'Settings updated successfully',
+    credentialChange: 'Update successful',
+    verificationRequired: 'Verification required, check your email',
+    setPassword: 'Password has been set', // NOSONAR
+    retry: 'Try again',
+    email: 'Email verificaton has been enabled',
+    disabled: '2FA has been disabled',
+    sms: 'SMS verification has been enabled',
+    loadFailure: 'Failed to load profile data',
+    invalidPateint: 'Pateint with this id does not exist, please try again',
+    docLoad: 'Document loaded successfully',
+    docFailLoad: 'Failed to load document',
+    invalidExtention: 'Unable to determine file extension',
+    failsToload: 'Failed to load this resource, try again',
+    recordCreated: 'Record created successfully',
+    recordUpdated: 'Record updated successfully',
+    failedRecord: 'Failed to create record',
+    failedUpdate: 'Failed to update record',
+    recordDeleted: 'Record deleted successfully',
+    deleteFailed: 'Failed to delete item',
+    deleteSuccess: 'Item deleted successfully',
+    fetchFailed: 'Failed to fetch data',
+    updateFailed: 'Failed to update item',
+    use404: 'This patient does not have this previlege',
+    noteSuccess: 'Notes sent to patient',
+    visitSuccess: 'Visit scheduled',
+  },
+};
+export type ToastStatus = keyof typeof toastNotifications.status;
+export type ToastOperation = keyof typeof toastNotifications.operations;
+export type ToastMessage = keyof typeof toastNotifications.messages;

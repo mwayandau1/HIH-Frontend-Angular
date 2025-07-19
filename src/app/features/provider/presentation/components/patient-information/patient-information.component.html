@@ -1,0 +1,57 @@
+<div class="border border-primary rounded-md py-4 px-6 mt-6 w-full h-full">
+  <h2 class="text-xl font-bold tracking-wider mb-3">Patient Information</h2>
+
+  <div class="grid grid-cols-2 auto-rows-min">
+    <div class="rounded-md">
+      <h4 class="font-semibold text-lg mb-2">Contact Information</h4>
+      <p class="text-sm">Phone: {{ patient().phoneNumber || 'N/A' }}</p>
+      <p class="text-sm">Email: {{ patient().email || 'N/A' }}</p>
+      <p class="text-sm">Address: {{ patient().address || 'N/A' }}</p>
+    </div>
+
+    <div class="py-1 rounded-md">
+      @let medicalInfo = patient().medInformations;
+      <h4 class="font-semibold text-lg mb-2">Medical Information</h4>
+      <p class="text-sm">
+        Primary Physician: {{ medicalInfo ? medicalInfo.primaryPhysician : 'N/A' }}
+      </p>
+      <p class="text-sm">Blood Type: {{ medicalInfo ? medicalInfo.bloodType : 'N/A' }}</p>
+    </div>
+
+    <div class="py-1 rounded-md">
+      <h4 class="font-semibold text-lg mb-2">Emergency Contact</h4>
+      <p class="text-sm">{{ patient().emergencyContact || 'N/A' }}</p>
+    </div>
+
+    <div class="py-1 rounded-md">
+      <h4 class="font-semibold text-lg mb-2">Allergies</h4>
+      <div class="flex gap-1 items-center flex-wrap">
+        @for (allergy of patient().allergies; track $index) {
+          <span
+            class="text-xs bg-tertiary text-secondary-black border border-custom-brown py-1 px-3 rounded-xl"
+            >{{ allergy.substance }}</span
+          >
+        }
+      </div>
+    </div>
+
+    <div class="py-1 rounded-md">
+      @let insurance = patient().insurance;
+      <h4 class="font-semibold text-lg mb-2">Insurance</h4>
+      <p class="text-sm">Provider: {{ insurance ? insurance.provider : 'N/A' }}</p>
+      <p class="text-sm">Policy Number: {{ insurance ? insurance.insuranceId : 'N/A' }}</p>
+    </div>
+
+    <div class="py-1 rounded-md">
+      <h4 class="font-semibold text-lg mb-2">Conditions</h4>
+      <div class="flex gap-1 items-center flex-wrap">
+        @for (condition of patient().conditions; track $index) {
+          <span
+            class="text-xs bg-tertiary text-secondary-black border border-custom-brown py-1 px-3 rounded-xl"
+            >{{ condition.conditionName }}</span
+          >
+        }
+      </div>
+    </div>
+  </div>
+</div>

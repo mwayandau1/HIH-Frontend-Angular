@@ -1,0 +1,40 @@
+<main class="px-6 py-12">
+  <app-settings-heading
+    title="Compliance Settings"
+    description="Configure and monitor compliance with healthcare regulations"
+  />
+
+  <div class="border border-primary rounded-md p-4 pt-6">
+    <div class="border border-primary rounded-md p-4 pt-6 flex flex-col gap-3">
+      <h2 class="font-bold text-xl">Default Access Expiration for Providers</h2>
+
+      <app-input
+        id="access-expiration-field"
+        label="Period for provider access to patients records(months)"
+        [control]="accessExpiration"
+        [errorMessage]="
+          accessExpiration.invalid ? 'This field only accepts numeric characters' : ''
+        "
+      />
+    </div>
+
+    <div class="mt-6">
+      @for (regulation of regulations; track $index) {
+        <div [ngClass]="{ 'mb-6': $first, 'mt-6': $last }">
+          <h3 class="font-bold text-lg">{{ regulation.title }}</h3>
+          <ul class="mt-2 pl-5 flex gap-1 flex-col">
+            @for (rule of regulation.rules; track $index) {
+              <li class="list-disc">
+                <span class="font-bold">{{ rule.name }}:</span> {{ rule.description }}
+              </li>
+            }
+          </ul>
+        </div>
+
+        @if ($first) {
+          <hr class="border-t border-custom-brown" />
+        }
+      }
+    </div>
+  </div>
+</main>

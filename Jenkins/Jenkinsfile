@@ -1,0 +1,228 @@
+pipeline {
+    agent any
+
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '10'))
+        skipDefaultCheckout(true)
+        preserveStashes(buildCount: 5)
+        timeout(time: 1, unit: 'HOURS')
+    }
+    environment {
+        ECR_REGISTRY = credentials('ecr-registry-hih')
+        AWS_REGION = credentials('aws-primary-region-hih')
+        ECR_REPOSITORY = "hih-frontend"
+        NODE_ENV = 'development'
+        registryCredential = "ecr:${AWS_REGION}:awscredentials"
+        appRegistry = "${ECR_REGISTRY}/${ECR_REPOSITORY}"
+        frontendRegistry = "https://${ECR_REGISTRY}"
+        cluster = 'Healthcare-Inter-Hub-ecs-cluster'
+        service = 'Healthcare-Inter-Hub-frontend'
+    }
+
+
+    tools {
+        nodejs 'node22'
+    }
+
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                script {
+                    stash includes: 'package*.json', name: 'package-json'
+                    if (fileExists('node_modules')) {
+                        stash includes: 'node_modules/**', name: 'node-modules'
+                    }
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    sh '''
+                        echo "Node version: $(node -v)"
+                        echo "NPM version: $(npm -v)"
+                    '''
+                    retry(3) {
+                        try {
+                            unstash 'node-modules'
+                            echo 'Successfully restored node_modules from cache'
+                        } catch (Exception e) {
+                            echo 'No cached node_modules found, running fresh install'
+                            sh 'npm ci'
+                            stash includes: 'node_modules/**', name: 'node-modules'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Husky Checks') {
+            steps {
+                echo 'Running Prettier Check'
+                sh 'npm run format:check'
+
+                echo 'Running ESLint'
+                sh 'npm run lint'
+
+                echo 'Running Tests...'
+                sh 'npm run test'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            environment {
+                scannerHome = tool 'SonarScanner'
+            }
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
+
+        stage('SonarQube Quality Gate') {
+            steps {
+                timeout(time: 10, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            options {
+                timeout(time: 15, unit: 'MINUTES')
+            }
+            when{
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                }
+            }
+
+            steps {
+                script {
+                    def dockerfilePath = './Docker/Dockerfile'
+                    def contextPath = '.'
+                    dockerImage = docker.build( appRegistry + ":$BUILD_NUMBER", "-f ${dockerfilePath} ${contextPath}")
+                }
+            }
+
+
+        }
+
+        stage('Scan Docker Image with Trivy') {
+            when{
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                }
+            }
+
+            steps {
+                script {
+                    sh """
+                        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
+                        aquasec/trivy:0.57.1 image --exit-code 1 --severity HIGH,CRITICAL ${appRegistry}:$BUILD_NUMBER
+                    """
+                }
+            }
+        }
+
+        stage('Build and Push Image to ECR') {
+            when {
+                anyOf {
+                    branch 'develop'
+                    branch 'main'
+                }
+            }
+            steps {
+                script {
+                    docker.withRegistry( frontendRegistry, registryCredential ){
+                        dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push('latest')
+                    }
+                }
+            }
+        }
+
+
+        stage('Deploy to Dev') {
+            when{
+                anyOf {
+                    branch 'develop'
+                }
+            }
+            steps {
+                withAWS(credentials: 'awscredentials', region: "${AWS_REGION}") {
+                    sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
+                }
+            }
+        }
+
+        stage('Deploy to Prod') {
+            when{
+                anyOf {
+                    branch 'main'
+                }
+            }
+            steps {
+                withAWS(credentials: 'awscredentials', region: "${AWS_REGION}") {
+                    sh 'aws ecs update-service --cluster ${cluster} --service ${service} --force-new-deployment'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                currentBuild.displayName = "#${BUILD_NUMBER} - ${env.BRANCH_NAME}"
+                currentBuild.description = "Build on ${env.BRANCH_NAME}"
+            }
+            echo 'Finished running pipeline.'
+            cleanWs()
+            setBuildStatus("Pipeline finished", "PENDING")
+        }
+        success {
+            echo 'Pipeline completed successfully.'
+            setBuildStatus("Pipeline successful", "SUCCESS")
+        }
+        failure {
+            echo 'Pipeline failed!'
+            setBuildStatus("Pipeline failed", "FAILURE")
+        }
+        unstable {
+            echo 'Pipeline was unstable.'
+            setBuildStatus("Pipeline unstable", "UNSTABLE")
+        }
+    }
+}
+
+void setBuildStatus(String message, String state) {
+    step([
+        $class: 'GitHubCommitStatusSetter',
+        reposSource: [
+            $class: 'ManuallyEnteredRepositorySource',
+            url: 'https://github.com/Amali-Tech/HIH-Frontend.git'
+        ],
+        contextSource: [
+            $class: 'ManuallyEnteredCommitContextSource',
+            context: 'ci/jenkins/build-status'
+        ],
+        errorHandlers: [[
+            $class: 'ChangingBuildStatusErrorHandler',
+            result: 'UNSTABLE'
+        ]],
+        statusResultSource: [
+            $class: 'ConditionalStatusResultSource',
+            results: [[
+                $class: 'AnyBuildResult',
+                message: message,
+                state: state
+            ]]
+        ]
+    ])
+}

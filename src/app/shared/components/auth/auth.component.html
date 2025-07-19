@@ -1,0 +1,40 @@
+<section
+  class="h-screen w-full bg-cover bg-no-repeat bg-[left_-300px_center] flex flex-row justify-center items-center lg:items-stretch lg:bg-[linear-gradient(to_bottom,rgba(0,0,0,0),rgba(0,0,0,0.9)),url(/images/auth-bg.jpg)]"
+>
+  <div
+    class="absolute inset-0 bg-[url(/images/auth-bg.jpg)] bg-cover bg-no-repeat bg-[left_-300px_center] filter saturate-50 blur-sm lg:hidden"
+  ></div>
+  <div class="flex-col justify-between xl:px-10 p-8 xl:py-14 w-[50%] text-white lg:flex hidden">
+    <header class="flex flex-col gap-2">
+      <h1 class="text-4xl">Welcome to HealthZip</h1>
+      <p class="text-sm">
+        Access your healthcare information securely and connect with your providers and patients
+      </p>
+    </header>
+
+    <footer class="flex flex-col gap-3">
+      <h2 class="text-xl">Secure Access</h2>
+      <p class="text-sm">
+        Your health information is protected with industry-leading security standards and HIPAA
+        compliance.
+      </p>
+    </footer>
+  </div>
+  <div
+    class="bg-white px-6 xl:px-12 flex flex-col items-center justify-start h-auto rounded-lg lg:rounded-none lg:w-[50%] md:w-[70%] w-[90%] relative z-10 lg:h-full py-12 md:py-26 lg:py-2"
+  >
+    <img
+      src="logo.png"
+      alt="health zip logo"
+      class="absolute -top-6 xl:-top-2 h-32 w-32 lg:h-36 2x:h-44 lg:w-36 2x:w-44"
+    />
+    <div
+      class="text-center mt-12 md:mt-16 lg:mt-32 2xl:mt-44 flex flex-col gap-4 w-full md:w-[80%] lg:w-[75%] 2xl:w-[65%]"
+    >
+      <h3 class="font-bold xl:text-2xl lg:text-lg">
+        {{ isFirstVisit() ? 'Setup a password for your account' : 'Enter your details to sign in' }}
+      </h3>
+      <ng-content />
+    </div>
+  </div>
+</section>

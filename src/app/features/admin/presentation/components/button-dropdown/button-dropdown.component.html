@@ -1,0 +1,45 @@
+<div class="relative inline-block" #dropdownContainer>
+  <button
+    class="flex items-center gap-2 w-6 h-6 justify-center text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
+    (click)="toggleDropdown()"
+    type="button"
+    aria-haspopup="true"
+    [attr.aria-expanded]="isOpen"
+  >
+    <div class="w-full h-4 transition-transform duration-200" [class.rotate-180]="isOpen">
+      <lucide-icon
+        strokeWidth="3px"
+        [img]="arrow"
+        class="w-full h-4 text-secondary-black"
+      ></lucide-icon>
+    </div>
+  </button>
+  @if (isOpen) {
+    <button
+      [class]="className() + ' hide-scrollbar'"
+      class="absolute right-0 z-10 origin-top-right max-h-40 overflow-y-auto bg-active-tab-text rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+      role="menu"
+      aria-orientation="vertical"
+      tabindex="-1"
+    >
+      <button
+        class="block w-full px-4 py-2 text-base text-left border-b border-primary bg-gray-100 text-gray-900"
+        role="menuitem"
+        tabindex="-1"
+        (click)="selectItem({ id: 'all', label: 'All' })"
+      >
+        {{ clearId() }}
+      </button>
+      @for (item of options(); track item.id) {
+        <button
+          class="block w-full px-4 py-2 text-base text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+          role="menuitem"
+          tabindex="-1"
+          (click)="selectItem(item)"
+        >
+          {{ formatWord(item.label) }}
+        </button>
+      }
+    </button>
+  }
+</div>

@@ -1,0 +1,9 @@
+.transition-all {
+  transition-property: all;
+}
+.duration-300 {
+  transition-duration: 300ms;
+}
+.ease-in-out {
+  transition-timing-function: ease-in-out;
+}

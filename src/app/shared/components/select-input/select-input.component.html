@@ -1,0 +1,60 @@
+<div class="relative flex w-full flex-col items-start gap-1 text-primary-black text-sm">
+  @if (label()) {
+    <label [for]="label()">
+      {{ label() }}
+      @if (required()) {
+        <span class="text-red-700">*</span>
+      }
+    </label>
+  }
+
+  <button
+    class="relative flex h-[3rem] items-center justify-between rounded-[0.5rem] border border-primary bg-white px-2 w-full outline-none transition-all duration-200 ease-in-out focus:outline-none"
+    [class.cursor-not-allowed]="!disabled()"
+    [class.bg-gray-100]="!disabled()"
+    [class.text-gray-400]="disabled()"
+    [class.cursor-pointer]="!disabled()"
+    [class.open]="isOpen()"
+    (click)="toggleDropdown()"
+    (keydown.enter)="toggleDropdown()"
+    (keydown.space)="toggleDropdown(); $event.preventDefault()"
+  >
+    <span class="[&.placeholder]:text-gray-400" [class.placeholder]="!control()?.value">
+      {{ selectedLabel() }}
+    </span>
+    <div
+      class="transition-transform duration-200 ease-in-out [&.open]:rotate-180"
+      [class.open]="isOpen()"
+    >
+      <lucide-icon [img]="arrowIcon" class="flex h-6 w-6 items-center justify-center"></lucide-icon>
+    </div>
+  </button>
+
+  @if (isOpen()) {
+    <div
+      class="absolute left-0 right-0 top-full z-50 mt-1 max-h-[10rem] overflow-y-auto rounded border border-gray-200 bg-white shadow-lg flex flex-col items-start"
+    >
+      @for (option of options(); track option.id) {
+        <button
+          class="cursor-pointer px-4 py-3 w-full flex items-start text-gray-500 transition-colors duration-200 ease-in-out hover:bg-gray-100 focus:bg-gray-200 focus:outline-none"
+          (click)="selectOption(option.id)"
+          (keydown.enter)="selectOption(option.id)"
+          (keydown.space)="selectOption(option.id); $event.preventDefault()"
+          tabindex="0"
+          [class.bg-blue-50]="control()?.value === option.id"
+        >
+          {{ option.label }}
+        </button>
+      }
+    </div>
+    <button
+      class="fixed inset-0 z-40 bg-transparent"
+      (click)="closeDropdown()"
+      (keydown.enter)="closeDropdown()"
+      (keydown.space)="closeDropdown(); $event.preventDefault()"
+      tabindex="0"
+    >
+      <span class="sr-only">Close dropdown</span>
+    </button>
+  }
+</div>

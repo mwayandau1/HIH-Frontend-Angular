@@ -1,0 +1,39 @@
+<div class="p-5 flex flex-col gap-6">
+  <app-context-header
+    [icon]="icon()"
+    [title]="title()"
+    [subtitle]="subtitle()"
+    (contextButtonAction)="contextButtonAction.emit($event)"
+    [contextButtonText]="contextButtonText()"
+  />
+  <ul class="text-primary-black flex gap-3 flex-col">
+    <ng-content></ng-content>
+  </ul>
+
+  <div class="flex gap-6 justify-between items-center">
+    @if (!paginated()) {
+      @if ((primaryButtonText() && !noData()) || showAllBUttons()) {
+        <app-button
+          [title]="primaryButtonTitle() || 'primary-button'"
+          [variant]="primaryButtonVariant()"
+          class="w-full"
+          customStyles="w-full"
+          (clickEvent)="primaryButtonClick.emit($event)"
+        >
+          {{ primaryButtonText() }}
+        </app-button>
+      }
+    }
+    @if (secondaryButtonText()) {
+      <app-button
+        [title]="secondaryButtonTitle() || 'secondary-button'"
+        [variant]="secondaryButtonVariant()"
+        class="w-full"
+        customStyles="w-full"
+        (clickEvent)="secondaryButtonClick.emit($event)"
+      >
+        {{ secondaryButtonText() }}
+      </app-button>
+    }
+  </div>
+</div>

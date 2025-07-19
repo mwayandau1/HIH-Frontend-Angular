@@ -1,0 +1,119 @@
+<app-list-container
+  [showAllBUttons]="true"
+  icon="./images/alert.svg"
+  title="Allergies & Conditions"
+  subtitle="Known allergies and chronic conditions"
+  primaryButtonText="Add Allergy"
+  primaryButtonVariant="secondary"
+  secondaryButtonText="Add Condition"
+  secondaryButtonVariant="secondary"
+  (secondaryButtonClick)="handleAddAction('ADD', $event, 'CONDITION')"
+  (primaryButtonClick)="handleAddAction('ADD', $event, 'ALLERGY')"
+>
+  <app-badge-list
+    [loading]="loadingAllergies()"
+    title="Allergies"
+    [items]="displayAllergies()"
+    [selectedItem]="selectedBadge()"
+    (selectItem)="onSelectBadge($event, 'ALLERGY')"
+    (edit)="onAction('EDIT', $event, 'ALLERGY')"
+    (delete)="onAction('DELETE', $event, 'ALLERGY')"
+  />
+
+  <app-badge-list
+    [loading]="loadingConditions()"
+    title="Conditions"
+    [items]="displayConditions()"
+    [selectedItem]="selectedBadge()"
+    [showBorder]="false"
+    (selectItem)="onSelectBadge($event, 'CONDITION')"
+    (edit)="onAction('EDIT', $event, 'CONDITION')"
+    (delete)="onAction('DELETE', $event, 'CONDITION')"
+  />
+
+  <app-modal
+    [isOpen]="isModalOpen()"
+    [loading]="creating()"
+    [title]="modalAction() + ' ' + (selectedType() === 'ALLERGY' ? 'Allergy' : 'Condition')"
+    (closeModal)="closeModal()"
+    [primaryButtonText]="
+      modalAction() === 'EDIT' || (modalAction() === 'ADD' && selectedType() === 'ALLERGY')
+        ? 'Save Allergy'
+        : modalAction() === 'EDIT' || (modalAction() === 'ADD' && selectedType() === 'CONDITION')
+          ? 'Save Condition'
+          : 'Delete'
+    "
+    [secondaryButtonText]="'Cancel'"
+    (secondaryButtonClick)="closeModal()"
+    (primaryButtonClick)="handleModalSubmit()"
+  >
+    <div class="text-sm text-left">
+      @if (modalAction() === 'DELETE') {
+        Are you sure you want to delete this
+        {{ selectedType() === 'ALLERGY' ? 'allergy' : 'condition' }}? "{{ selectedBadge()?.name }}"
+        This action cannot be undone
+      } @else {
+        @if (formData && selectedType() === 'ALLERGY' && formData.get('substance')) {
+          <app-input
+            [errorMessage]="checkFieldError(formData, 'substance') ?? ''"
+            [label]="'Substance'"
+            id="substance"
+            [control]="substanceControl"
+            [required]="true"
+          />
+          <app-input
+            [label]="'Reaction'"
+            id="reaction"
+            [control]="reactionControl"
+            *ngIf="formData.get('reaction')"
+          />
+          <app-input
+            [label]="'Severity'"
+            id="severity"
+            [control]="severityControl"
+            *ngIf="formData.get('severity')"
+          />
+        } @else if (formData && selectedType() === 'CONDITION' && formData.get('conditionName')) {
+          <app-input
+            [errorMessage]="checkFieldError(formData, 'conditionName') ?? ''"
+            [label]="'Condition Name'"
+            id="conditionName"
+            [control]="conditionNameControl"
+            [required]="true"
+          />
+          <app-input
+            [label]="'Description'"
+            id="description"
+            [control]="descriptionControl"
+            *ngIf="formData.get('description')"
+          />
+          <app-input
+            [label]="'Severity'"
+            id="severity"
+            [control]="severityControl"
+            *ngIf="formData.get('severity')"
+          />
+          <app-input
+            [label]="'Treatment Plan'"
+            id="treatmentPlan"
+            [control]="treatmentPlanControl"
+            *ngIf="formData.get('treatmentPlan')"
+          />
+          <app-input
+            [label]="'Diagnosis Date'"
+            id="diagnosisDate"
+            type="date"
+            [control]="diagnosisDateControl"
+            *ngIf="formData.get('diagnosisDate')"
+          />
+          <app-input
+            [label]="'Notes'"
+            id="notes"
+            [control]="notesControl"
+            *ngIf="formData.get('notes')"
+          />
+        }
+      }
+    </div>
+  </app-modal>
+</app-list-container>

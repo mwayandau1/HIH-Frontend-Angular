@@ -1,0 +1,80 @@
+<div
+  [ngClass]="{
+    'justify-end': isOwn(),
+    'justify-start': !isOwn(),
+  }"
+  class="mb-4 flex gap-2"
+>
+  @if (!isOwn()) {
+    <div
+      class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-secondary-black text-sm font-bold"
+    >
+      {{ getProviderInitials(name().split(' ')[0], name().split(' ')[1]) }}
+    </div>
+  }
+  <div
+    [ngClass]="{
+      'bg-primary': isOwn(),
+      'bg-tertiary ': !isOwn(),
+      'p-0': message().type === 'IMAGE',
+      'px-4 py-2': message().type !== 'IMAGE' && message().type !== 'FILE',
+    }"
+    class="rounded-lg shadow-sm max-w-[60%] text-typo-active relative mb-2"
+  >
+    @if (message().type === 'IMAGE') {
+      <div class="flex flex-col gap-2">
+        <app-button title="file" customStyle="!p-0" variant="tertiary" (clickEvent)="openImage()">
+          <img
+            [src]="message().fileUrl"
+            [alt]="message().fileName"
+            (load)="onImageLoad()"
+            (error)="onImageError()"
+            class="max-w-[300px] max-h-[300px] rounded-lg cursor-pointer object-cover"
+          />
+        </app-button>
+      </div>
+
+      @if (showImagePreview()) {
+        <app-image-preview
+          [imageUrl]="message().fileUrl ?? ''"
+          (closeModal)="closeImagePreview()"
+        />
+      }
+    } @else if (message().type === 'FILE') {
+      <div class="flex items-center gap-3 bg-gray-50 p-3 rounded-lg">
+        <div class="text-gray-600">
+          <lucide-icon [img]="getFileIcon(message().fileType ?? '')" [size]="24" />
+        </div>
+        <div class="flex-1 min-w-0">
+          <p class="text-sm font-medium truncate">{{ message().fileName }}</p>
+          <p class="text-xs text-gray-500">{{ formatFileSize(message().fileSize ?? 0) }}</p>
+        </div>
+        <button
+          class="p-2 hover:bg-gray-200 rounded-full transition-colors"
+          (click)="downloadFile()"
+        >
+          <lucide-icon [img]="icons.Download" [size]="16" />
+        </button>
+      </div>
+    } @else {
+      <p class="break-words">{{ message().content }}</p>
+    }
+
+    @if (isOwn()) {
+      <span class="flex items-center justify-end ml-auto">
+        @if (message().readBy.length > 1) {
+          <lucide-icon [img]="icons.CheckCheck" [size]="14" class="text-blue-400" />
+        } @else if (message().readBy.length > 0) {
+          <lucide-icon [img]="icons.Check" [size]="14" />
+        }
+      </span>
+    }
+
+    <p
+      class="text-xs opacity-75 absolute -bottom-6 pr-2"
+      [ngClass]="{ 'right-0': isOwn(), 'left-0': !isOwn() }"
+    >
+      {{ formatTime(message().createdAt) }}
+    </p>
+  </div>
+</div>

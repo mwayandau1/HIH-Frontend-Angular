@@ -1,0 +1,94 @@
+<section class="border border-primary rounded-md p-4 mt-6 w-full">
+  <div class="flex justify-between items-center">
+    <div class="flex items-center gap-3">
+      <img src="/images/clock.svg" alt="clock icon" [height]="50" [width]="50" />
+      <div>
+        <h3 class="text-2xl font-semibold tracking-wide">Visit History</h3>
+        <p>Complete history of patient visits and encounters</p>
+      </div>
+    </div>
+    <app-button title="Schedule visit" variant="secondary" (clickEvent)="isModalOpen.set(true)"
+      >Schedule Visit</app-button
+    >
+  </div>
+
+  <div class="mt-10 flex flex-col gap-10 w-full">
+    @if (isFetchingVisits()) {
+      <div class="flex justify-center items-center py-10">
+        <app-loader />
+      </div>
+    } @else {
+      @let iconColor = '#69533F';
+      @for (visit of pageItems(); track $index) {
+        <div [class.border-b]="!$last" class="border-primary flex flex-col gap-3 pb-2 w-full">
+          <div class="flex gap-4 items-center">
+            <lucide-icon [img]="icons.Calendar" [size]="27" [color]="iconColor" />
+            <h5 class="text-lg font-bold">{{ visit.visitDate | date: 'MMM d, y' }}</h5>
+          </div>
+          <div class="flex gap-4 items-center capitalize">
+            <lucide-icon [img]="icons.FileText" [size]="22" [color]="iconColor" />
+            <p>{{ visit.purpose.toLowerCase() }}</p>
+          </div>
+          <div class="flex gap-4 items-center">
+            <lucide-icon [img]="icons.User" [size]="22" [color]="iconColor" />
+            <p>{{ visit.providerName }}</p>
+          </div>
+
+          <div class="bg-tertiary rounded-md py-3 px-5 flex flex-col gap-3 mt-4">
+            <h6 class="text-table-typo font-bold">Visit Notes</h6>
+            <p class="whitespace-nowrap overflow-hidden text-ellipsis">
+              {{ visit.notes }}
+            </p>
+          </div>
+        </div>
+      }
+      <app-pagination
+        [totalRecords]="visits()?.numberOfElements ?? 1"
+        [amountOnDisplay]="4"
+        [numOfPages]="pageCount()"
+      />
+    }
+  </div>
+</section>
+
+<app-modal title="Schedule Visit" [isOpen]="isModalOpen()" (closeModal)="isModalOpen.set(false)">
+  <form [formGroup]="visitForm" (ngSubmit)="onSubmit()">
+    <app-date-picker label="Select Date" id="date-field" [control]="visitForm.controls.date" />
+    <app-input
+      id="purpose-of-visit-field"
+      [required]="true"
+      label="Purpose of visit"
+      placeholder="Check-up"
+      [errorMessage]="checkFieldErrors(visitForm, 'visitPurpose') ?? ''"
+      [control]="visitForm.controls.visitPurpose"
+    />
+    <div>
+      <label for="" class="inline-block mb-3 text-sm">Add Visit Notes</label>
+      <textarea
+        class="w-full border border-primary rounded-md px-3 py-1 focus:outline-0 text-sm placeholder:text-typo-primary"
+        rows="3"
+        placeholder="Visit notes"
+        [formControl]="visitForm.controls.visitNote"
+      ></textarea>
+    </div>
+
+    <div class="flex justify-end items-center gap-3 mt-3">
+      <app-button title="Cancel" variant="secondary" (clickEvent)="visitForm.reset()"
+        >Cancel</app-button
+      >
+      <app-button
+        title="Schedule Visit"
+        type="submit"
+        class="w-40"
+        customStyles="flex w-full justify-center items-center"
+        [disabled]="visitForm.invalid"
+      >
+        @if (isPostingVisits()) {
+          <app-loader />
+        } @else {
+          <p>Schedule Visit</p>
+        }
+      </app-button>
+    </div>
+  </form>
+</app-modal>

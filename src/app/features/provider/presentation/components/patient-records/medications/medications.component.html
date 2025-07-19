@@ -1,0 +1,109 @@
+<app-list-container
+  [noData]="filteredMedications().length === 0"
+  icon="./images/pill.svg"
+  title="Medications"
+  subtitle="Current and past medications"
+  primaryButtonText="View all
+  Medications"
+  primaryButtonVariant="secondary"
+  secondaryButtonText="Add
+  Medication"
+  secondaryButtonVariant="primary"
+  primaryButtonTitle="view-all-lab-results"
+  secondaryButtonTitle="add-lab-results"
+  (secondaryButtonClick)="toggleAddModal()"
+  (primaryButtonClick)="visitAllMedications()"
+  [paginated]="paginated()"
+>
+  @if (loading()) {
+    <div class="flex flex-col gap-5">
+      @for (skelecton of [1, 2, 3]; track skelecton) {
+        <app-record-skelecton />
+      }
+    </div>
+  } @else if (filteredMedications().length > 0) {
+    <ul class="text-primary-black flex gap-[0.9rem] flex-col">
+      @for (result of filteredMedications(); track result.id; let i = $index) {
+        <li
+          class="flex flex-col gap-4 pb-4"
+          [ngClass]="{ 'border-b border-primary': i < filteredMedications().length - 1 }"
+        >
+          <div class="flex flex-col">
+            <div class="flex justify-between items-center">
+              <h2 class="font-bold">{{ result.medicationName }}</h2>
+              <p class="text-sm">{{ result.frequency }}</p>
+            </div>
+            <div class="flex gap-1 items-center">
+              <p class="text-xs">Dosage: {{ result.dosage }}</p>
+              <span class="h-1 w-1 rounded-full bg-primary-black"></span>
+              <p class="text-xs">Started: {{ formatDate(result.startDate) }}</p>
+            </div>
+          </div>
+        </li>
+      }
+    </ul>
+  } @else {
+    <div class="w-full flex-col flex justify-center items-center gap-4 py-8">
+      <img src="./images/no-data.png" alt="no data" />
+      <p class="text-typo-primary nodata">No Data Found</p>
+    </div>
+  }
+</app-list-container>
+<app-modal
+  [title]="'Add Medications'"
+  [loading]="creating()"
+  [isOpen]="isAddMedicationModalOpen"
+  [primaryButtonText]="'Save Medication'"
+  [secondaryButtonText]="'Cancel'"
+  (primaryButtonClick)="saveChanges()"
+  (secondaryButtonClick)="toggleAddModal()"
+  (closeModal)="toggleAddModal()"
+>
+  <div class="flex flex-col gap-4">
+    <app-input
+      id="medication-name"
+      label="Medication Name"
+      [required]="true"
+      [control]="name"
+      placeholder="Medication name here"
+      class="w-full"
+      [errorMessage]="checkFieldErrors(medicationFrom, 'name') ?? ''"
+    />
+
+    <app-date-picker
+      label="Start Date"
+      id="medication-start-date"
+      [control]="startDate"
+      [errorMessage]="checkFieldErrors(medicationFrom, 'startDate') ?? ''"
+      [required]="true"
+    />
+
+    <app-date-picker
+      label="End Date"
+      id="medication-end-date"
+      [control]="endDate"
+      [errorMessage]="checkFieldErrors(medicationFrom, 'endDate') ?? ''"
+      [required]="true"
+    />
+
+    <app-input
+      id="medication-frequency"
+      label="Frequency"
+      [required]="true"
+      [control]="frequency"
+      placeholder="e.g. Twice daily"
+      class="w-full"
+      [errorMessage]="checkFieldErrors(medicationFrom, 'frequency') ?? ''"
+    />
+    <div class="flex flex-col gap-2 items-start">
+      <label for="dosage-form">Add Dosage</label>
+      <textarea
+        class="p-3 border h-[5rem] block w-full rounded-lg border-primary shadow-sm outline-none"
+        name="dosage"
+        id="dosage-form"
+        placeholder="Enter Dosage"
+        [formControl]="dosage"
+      ></textarea>
+    </div>
+  </div>
+</app-modal>

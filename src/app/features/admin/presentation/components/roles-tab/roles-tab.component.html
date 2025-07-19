@@ -1,0 +1,182 @@
+<div class="p-1 bg-white rounded-xl mt-6 flex flex-col gap-8">
+  <div class="flex justify-between items-center mb-6">
+    <div class="relative w-96">
+      <div class="relative w-96">
+        <app-input
+          id="search-input"
+          [control]="searchTerm"
+          className="w-full"
+          [hasIcon]="true"
+          iconPosition="left"
+          placeholder="Search roles"
+        >
+          <lucide-icon [img]="icons.Search" [size]="18" class="text-primary-black" />
+        </app-input>
+        @if (searchTerm.value) {
+          <button
+            (click)="clearSearch()"
+            class="absolute inset-y-0 right-0 top-1 flex items-center pr-3 text-gray-400 hover:text-gray-600"
+          >
+            <lucide-icon [img]="icons.X" [size]="18" />
+          </button>
+        }
+      </div>
+    </div>
+    <app-button title="add-role" customStyles="text-sm px-10" (clickEvent)="openAddRoleModal()">
+      Add Role
+    </app-button>
+  </div>
+
+  <div class="overflow-hidden">
+    <div class="p-6 rounded-md border h-full border-primary flex flex-col gap-4">
+      <div class="flex flex-col">
+        <h2 class="font-bold text-xl">Roles & Permissions</h2>
+        <p id="roles-description" class="text-sm text-gray-600">
+          Manage roles and their associated permissions
+        </p>
+      </div>
+      @if (loading()) {
+        <div class="flex justify-center items-center h-64">
+          <app-loader />
+        </div>
+      } @else {
+        @if (filteredRoles().length > 0) {
+          <div class="bg-white rounded-lg">
+            <div class="overflow-x-auto">
+              <table
+                class="w-full"
+                aria-label="Roles and Permissions"
+                aria-describedby="roles-description"
+              >
+                <thead class="bg-tertiary-black text-gray-700">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Role Name</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Date Created</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Status</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  @for (role of filteredRoles(); track role.id; let roleIndex = $index) {
+                    <tr
+                      class="hover:bg-gray-50 cursor-pointer"
+                      (click)="selectRole(role)"
+                      [class.bg-blue-50]="selectedRole?.id === role.id"
+                      (keydown.enter)="selectRole(role)"
+                    >
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">{{ role.name }}</div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="text-sm font-medium text-gray-900">
+                          {{ formatDate(role.createdAt!) }}
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 whitespace-nowrap">
+                        <span
+                          [class]="
+                            'w-16 h-8 flex text-center border justify-center items-center rounded-full text-xs font-medium ' +
+                            (role.active
+                              ? 'bg-green-100 text-green-800 border-green-300'
+                              : 'bg-red-100 text-red-800 border-red-300')
+                          "
+                        >
+                          {{ role.active ? 'Active' : 'Inactive' }}
+                        </span>
+                      </td>
+                      <td class="px-6 py-4 relative">
+                        <button
+                          class="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                          (click)="toggleRoleModal(role.id!, $event)"
+                        >
+                          <svg
+                            class="h-5 w-5"
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"
+                            />
+                          </svg>
+                        </button>
+
+                        @if (openModalRoleId === role.id) {
+                          <div
+                            [ngClass]="{
+                              'origin-top-right ': !isLastOrSecondToLast(roleIndex),
+                              'origin-bottom-right !bottom-16': isLastOrSecondToLast(roleIndex),
+                            }"
+                            class="absolute right-0 z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                          >
+                            <div
+                              class="py-1"
+                              role="menu"
+                              aria-orientation="vertical"
+                              aria-labelledby="options-menu"
+                            >
+                              <button
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                role="menuitem"
+                                (click)="editRole(role, $event)"
+                              >
+                                Edit
+                              </button>
+                              <button
+                                class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                role="menuitem"
+                                (click)="toggleRoleStatus(role, $event)"
+                              >
+                                {{ role.active ? 'Deactivate' : 'Activate' }}
+                              </button>
+                              <button
+                                class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                role="menuitem"
+                                (click)="deleteRole(role, $event)"
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </div>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        } @else {
+          <div class="w-full flex-col flex justify-center items-center gap-4 py-8">
+            @if (searchTerm.value) {
+              <p class="text-typo-primary">No roles found matching "{{ searchTerm.value }}"</p>
+            } @else {
+              <img src="./images/no-data.png" alt="no data" />
+              <p class="text-typo-primary">No roles available</p>
+            }
+          </div>
+        }
+      }
+    </div>
+
+    <app-role-form-modal
+      [updating]="updating()"
+      [gettingPermissions]="fetchingPermissions()"
+      [permissions]="permissions"
+      [role]="rolePendingAction"
+      [isEditMode]="isEditMode"
+      [isOpen]="showRoleModal()"
+      (closeModalEvent)="closeRoleModal()"
+      (roleData)="modalAction($event)"
+    />
+
+    <app-confirm-modal
+      [loading]="updating()"
+      [isOpen]="showConfirmationModal"
+      [pendingAction]="rolePendingAction"
+      (closeConfirmationModal)="closeConfirmationModal()"
+      (confirmAction)="confirmAction()"
+      [confirmationAction]="confirmationAction"
+    />
+  </div>
+</div>

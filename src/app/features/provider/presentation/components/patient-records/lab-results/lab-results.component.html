@@ -1,0 +1,116 @@
+<app-list-container
+  [noData]="labResults().length === 0"
+  buttonText="Test button"
+  icon="./images/labresults.svg"
+  title="Lab Results"
+  subtitle="just a doctor with a subtitle here"
+  primaryButtonText="View all Lab Results"
+  primaryButtonVariant="secondary"
+  (primaryButtonClick)="visitAllLabResults()"
+  [paginated]="paginated()"
+  secondaryButtonText="Add Lab Results"
+  secondaryButtonVariant="primary"
+  primaryButtonTitle="view-all-lab-results"
+  secondaryButtonTitle="add-lab-results"
+  (secondaryButtonClick)="toggleAddModal()"
+>
+  @if (loading()) {
+    <div class="flex flex-col gap-5">
+      @for (skelecton of [1, 2, 3]; track skelecton) {
+        <app-record-skelecton />
+      }
+    </div>
+  } @else if (labResults().length > 0) {
+    <ul>
+      @for (result of filteredResults(); track result.id; let i = $index) {
+        <li
+          class="flex flex-col gap-4 pb-4"
+          [ngClass]="{ 'border-b border-primary': i < labResults.length - 1 }"
+        >
+          <div class="flex flex-col">
+            <div class="flex justify-between items-center">
+              <h2 class="font-bold">{{ result.labTest }}</h2>
+              <p class="text-sm">{{ result.status }}</p>
+            </div>
+            <p class="text-xs">Date: {{ formatDate(result.resultDate) }}</p>
+          </div>
+          <p class="text-xs">{{ result.value }} {{ result.unit }}</p>
+        </li>
+      }
+    </ul>
+  } @else {
+    <div class="w-full flex-col flex justify-center items-center gap-4 py-8">
+      <img src="./images/no-data.png" alt="no data" />
+      <p class="text-typo-primary nodata">No Data Found</p>
+    </div>
+  }
+</app-list-container>
+<app-modal
+  [title]="'Add Immunization'"
+  [loading]="creating()"
+  [isOpen]="isAddLabResultsModalOpen()"
+  [primaryButtonText]="'Save Immunization'"
+  [secondaryButtonText]="'Cancel'"
+  (primaryButtonClick)="saveChanges()"
+  (secondaryButtonClick)="toggleAddModal()"
+  (closeModal)="cancelAddModal()"
+>
+  <div class="flex flex-col">
+    <app-input
+      id="labTest"
+      label="Lab Test"
+      [required]="true"
+      [control]="labTest"
+      [errorMessage]="checkFieldErrors(labResultsFrom, 'labTest') ?? ''"
+      placeholder="Enter lab test here"
+      class="w-full"
+    />
+    <app-input
+      id="value"
+      label="Value"
+      [required]="true"
+      [control]="value"
+      [errorMessage]="checkFieldErrors(labResultsFrom, 'value') ?? ''"
+      placeholder="Enter value here"
+      class="w-full"
+    />
+    <app-input
+      id="unit"
+      label="Unit"
+      [required]="true"
+      [control]="unit"
+      [errorMessage]="checkFieldErrors(labResultsFrom, 'unit') ?? ''"
+      placeholder="Enter unit here"
+      class="w-full"
+    />
+    <app-date-picker
+      id="resultDate"
+      label="Result Date"
+      [required]="true"
+      [control]="resultDate"
+      [errorMessage]="checkFieldErrors(labResultsFrom, 'resultDate') ?? ''"
+      placeholder="Select result date"
+      class="w-full"
+    />
+    <app-input
+      id="status"
+      label="Status"
+      [required]="true"
+      [control]="status"
+      [errorMessage]="checkFieldErrors(labResultsFrom, 'status') ?? ''"
+      placeholder="Enter status here"
+      class="w-full"
+    />
+
+    <div class="flex flex-col gap-2 items-start">
+      <label for="note">Add note</label>
+      <textarea
+        class="p-3 border h-[5rem] block w-full rounded-lg border-primary shadow-sm outline-none"
+        name="note"
+        id="note"
+        placeholder="Enter note here"
+        [formControl]="notes"
+      ></textarea>
+    </div>
+  </div>
+</app-modal>

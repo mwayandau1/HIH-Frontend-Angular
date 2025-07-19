@@ -1,0 +1,79 @@
+<section class="border border-primary rounded-md p-4 mt-6 w-full">
+  <div>
+    <h3 class="text-2xl font-semibold tracking-wide">Visit Notes and Documentation</h3>
+    <p>Add a new note or view existing documentation</p>
+  </div>
+
+  <form class="flex flex-col gap-2 mt-5" [formGroup]="noteForm" (ngSubmit)="onSubmit()">
+    <app-input
+      id="note-title-field"
+      label="Enter Note Title"
+      placeholder="Enter title here"
+      [control]="noteForm.controls.title"
+    />
+
+    <div>
+      <label for="" class="inline-block mb-3 text-sm">Create New Notes</label>
+      <textarea
+        class="w-full border border-primary rounded-md px-3 py-1 focus:outline-0 text-sm"
+        placeholder="Enter your clinical notes here..."
+        [formControl]="noteForm.controls.note"
+        rows="8"
+      ></textarea>
+    </div>
+
+    <div class="flex justify-end">
+      <app-button
+        title="Save note"
+        class="w-40"
+        [disabled]="!noteForm.value.title || !noteForm.value.note || isPostingNotes()"
+        customStyles="w-full flex justify-center"
+        type="submit"
+      >
+        @if (isPostingNotes()) {
+          <app-loader />
+        } @else {
+          <p>Save Note</p>
+        }
+      </app-button>
+    </div>
+  </form>
+
+  <div class="flex flex-col gap-3 mt-8">
+    <h5 class="font-bold text-lg">Recent Notes</h5>
+
+    @let iconColor = '#69533F';
+    @defer {
+      <div class="flex flex-col gap-3 max-h-[20rem] overflow-y-auto">
+        @if (isFetchingNotes()) {
+          <div class="h-[20rem] w-full flex justify-center items-center">
+            <app-loader />
+          </div>
+        } @else {
+          @for (note of patientNotes(); track $index) {
+            <details class="group px-3 py-4 border border-primary rounded-md cursor-pointer mr-4">
+              <summary class="font-bold relative">
+                {{ note.title }} - {{ note.createdAt | date: 'MMM d, y' }}
+                <span
+                  class="absolute right-0 top-1/2 -translate-y-1/2 w-[18px] h-[18px] origin-center transition-transform duration-300 group-open:rotate-180"
+                >
+                  <lucide-icon [img]="icons.ChevronDown" [size]="18" [color]="iconColor" />
+                </span>
+              </summary>
+              <div class="mt-3 flex flex-col gap-1">
+                <p>By: {{ note.providerId }}</p>
+                <p class="text-sm">{{ note.content }}</p>
+              </div>
+            </details>
+          }
+        }
+      </div>
+    } @placeholder {
+      <div
+        class="px-3 py-4 border border-primary rounded-md cursor-pointer mr-4 flex justify-center items-center"
+      >
+        <app-loader />
+      </div>
+    }
+  </div>
+</section>

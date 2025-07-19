@@ -1,0 +1,82 @@
+<div
+  class="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center"
+  [ngClass]="{ 'items-center': !isVideoCall(), 'items-top 2xl:items-center': isVideoCall() }"
+>
+  <div class="bg-primary rounded-lg shadow-xl w-full max-w-4xl h-[80vh] flex flex-col">
+    <div class="flex items-center justify-between p-4 border-b">
+      <h3 class="text-lg font-semibold">
+        {{ isVideoCall() ? 'Video Call' : 'Voice Call' }} - {{ recipientName() }}
+      </h3>
+      <app-button
+        variant="tertiary"
+        (clickEvent)="handleCloseModal()"
+        customStyles="!p-0"
+        title="Close"
+      >
+        <lucide-icon [img]="icons.X" [size]="20" />
+      </app-button>
+    </div>
+
+    <div class="flex-1 relative bg-gray-900">
+      @if (isVideoCall()) {
+        <video #remoteVideo autoplay playsinline class="w-full h-full object-cover"></video>
+
+        <video
+          #localVideo
+          autoplay
+          muted
+          playsinline
+          class="absolute bottom-4 right-4 w-48 h-36 object-cover rounded-lg border-2 border-white shadow-lg"
+        ></video>
+      } @else {
+        <div class="flex flex-col items-center justify-center h-full text-white">
+          <div
+            class="w-32 h-32 rounded-full bg-primary flex items-center justify-center text-4xl font-bold mb-4"
+          >
+            {{ getInitials(recipientName()) }}
+          </div>
+          <h2 class="text-2xl font-semibold mb-2">{{ recipientName() }}</h2>
+          <p class="text-gray-300">{{ callStatus() }}</p>
+        </div>
+      }
+
+      @if (callStatus() === 'Connecting...' && isVideoCall()) {
+        <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div class="text-white text-lg">{{ callStatus() }}</div>
+        </div>
+      }
+    </div>
+
+    <div class="p-4 bg-primary flex justify-center gap-4">
+      <button
+        (click)="toggleMute()"
+        [class.bg-red-500]="isMuted()"
+        [class.bg-gray-700]="!isMuted()"
+        class="p-4 rounded-full text-white hover:opacity-80 transition-opacity"
+        [title]="isMuted() ? 'Unmute' : 'Mute'"
+      >
+        <lucide-icon [img]="isMuted() ? icons.MicOff : icons.Mic" [size]="20" />
+      </button>
+
+      @if (isVideoCall()) {
+        <button
+          (click)="toggleVideo()"
+          [class.bg-red-500]="!isVideoEnabled()"
+          [class.bg-gray-700]="isVideoEnabled()"
+          class="p-4 rounded-full text-white hover:opacity-80 transition-opacity"
+          [title]="isVideoEnabled() ? 'Turn off camera' : 'Turn on camera'"
+        >
+          <lucide-icon [img]="isVideoEnabled() ? icons.Video : icons.VideoOff" [size]="20" />
+        </button>
+      }
+
+      <button
+        (click)="endCall()"
+        class="p-4 rounded-full bg-red-500 text-white hover:bg-red-600 transition-colors"
+        title="End call"
+      >
+        <lucide-icon [img]="icons.PhoneOff" [size]="20" />
+      </button>
+    </div>
+  </div>
+</div>

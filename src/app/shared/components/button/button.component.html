@@ -1,0 +1,27 @@
+<button
+  [title]="title()"
+  [type]="type()"
+  (click)="handleClick($event)"
+  class="py-3 px-6 rounded-md font-bold duration-300 disabled:cursor-not-allowed flex justify-center items-center"
+  [class.h-11]="variant() === 'primary' || variant() === 'secondary'"
+  [class]="customStyles()"
+  [ngClass]="{
+    'bg-inactive disabled:text-active cursor-not-allowed': disabled() && variant() === 'primary',
+    'bg-transparent border-[2px] border-inactive text-inactive cursor-not-allowed':
+      disabled() && variant() === 'secondary',
+    'disabled:text-inactive': disabled() && variant() === 'tertiary',
+    'bg-primary text-tab-secondary-active-typo hover:bg-hover active:bg-active':
+      !disabled() && variant() === 'primary',
+    'bg-transparent border-2 border-primary text-tab-secondary-active-typo hover:bg-tertiary-black hover:border-hover active:bg-hover active:border-active':
+      !disabled() && variant() === 'secondary',
+    'bg-transparent hover:text-custom-brown active:text-typo-active':
+      !disabled() && variant() === 'tertiary',
+  }"
+  [disabled]="disabled()"
+>
+  @if (loading()) {
+    <app-loader class="h-full" />
+  } @else {
+    <ng-content></ng-content>
+  }
+</button>

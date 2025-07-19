@@ -1,0 +1,39 @@
+@if (numOfPages() !== 1) {
+  <div class="flex items-center justify-between">
+    <p class="text-sm md:flex hidden">
+      Showing {{ amountOnDisplay() }} of {{ totalRecords() }} results
+    </p>
+
+    <div class="flex gap-2 items-center">
+      <app-button
+        variant="secondary"
+        title="Previous Page"
+        (clickEvent)="onChangePage('prev')"
+        [disabled]="currentPage() === 1"
+      >
+        Prev
+      </app-button>
+
+      <ul class="flex gap-2 items-center">
+        @for (page of pages(); track $index) {
+          <app-button
+            [variant]="currentPage() === page ? 'primary' : 'secondary'"
+            customStyles="!py-2 !px-4"
+            title="Move to Page {{ page }}"
+            (clickEvent)="onChangePage(undefined, page)"
+            >{{ page }}</app-button
+          >
+        }
+      </ul>
+
+      <app-button
+        variant="secondary"
+        title="Next Page"
+        (clickEvent)="onChangePage('next')"
+        [disabled]="currentPage() === numOfPages()"
+      >
+        Next
+      </app-button>
+    </div>
+  </div>
+}

@@ -1,0 +1,57 @@
+<form class="w-full mt-10 md:mt-6 2xl:mt-10" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+  <app-input
+    id="email-field"
+    label="Email"
+    [control]="authFormControls.email!"
+    placeholder="name@exmaple.com"
+    [hasIcon]="true"
+    iconPosition="left"
+    [errorMessage]="checkFieldError(authForm, 'email') ?? ''"
+  >
+    <app-button title="Email" variant="tertiary" customStyles="!p-0"
+      ><lucide-icon [img]="icons.Mail" [size]="18" color="#69533f"
+    /></app-button>
+  </app-input>
+
+  <app-input
+    id="password-field"
+    label="Password"
+    [type]="isPasswordVisible() ? 'text' : 'password'"
+    [hasIcon]="true"
+    iconPosition="right"
+    [control]="authFormControls.password"
+    placeholder="**********************"
+    [errorMessage]="checkFieldError(authForm, 'password') ?? ''"
+  >
+    <app-button
+      [title]="isPasswordVisible() ? 'Hide Password' : 'View Password'"
+      variant="tertiary"
+      customStyles="!p-0"
+      (clickEvent)="handlePasswordVisibility()"
+      ><lucide-icon
+        [img]="isPasswordVisible() ? icons.Eye : icons.EyeClosed"
+        [size]="18"
+        color="#69533f"
+    /></app-button>
+  </app-input>
+
+  @if (!checkFieldError(authForm, 'password')) {
+    <p class="xl:text-sm text-xs text-left">
+      Passwords must be at least 12 characters with letters, numbers, and symbols
+    </p>
+  }
+
+  <app-button
+    title="Sign in button"
+    variant="primary"
+    customStyles="w-full xl:mt-10 mt-6 justify-center align-item flex"
+    type="submit"
+    [disabled]="authForm.invalid || isLoading()"
+  >
+    @if (isLoading()) {
+      <app-loader />
+    } @else {
+      <p>Sign In</p>
+    }
+  </app-button>
+</form>

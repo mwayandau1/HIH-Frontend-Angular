@@ -1,0 +1,80 @@
+<app-list-container
+  [noData]="filteredImmunizations().length === 0"
+  icon="./images/syringe.svg"
+  title="Immunization"
+  subtitle="Vaccination history"
+  primaryButtonText="View all
+Immunization"
+  primaryButtonVariant="secondary"
+  secondaryButtonText="Add
+  Immunization"
+  secondaryButtonVariant="primary"
+  primaryButtonTitle="view-all-lab-results"
+  secondaryButtonTitle="add-lab-results"
+  (secondaryButtonClick)="toggleAddModal()"
+  [paginated]="paginated()"
+  (primaryButtonClick)="visitAllImmunizations()"
+>
+  @if (loading()) {
+    <div class="flex flex-col gap-5">
+      @for (skelecton of [1, 2, 3]; track skelecton) {
+        <app-record-skelecton />
+      }
+    </div>
+  } @else if (filteredImmunizations().length > 0) {
+    <ul>
+      @for (result of filteredImmunizations(); track result.id; let i = $index) {
+        <li
+          class="flex flex-col gap-4 pb-4"
+          [ngClass]="{ 'border-b border-primary': i < filteredImmunizations().length - 1 }"
+        >
+          <div class="flex flex-col">
+            <div class="flex justify-between items-center">
+              <h2 class="font-bold">{{ result.vaccineName }}</h2>
+            </div>
+            <p class="text-xs">Date: {{ formatDate(result.dateAdministered!) }}</p>
+          </div>
+          <p class="text-xs">{{ result.doseNumber }}</p>
+        </li>
+      }
+    </ul>
+  } @else {
+    <div class="w-full flex-col flex justify-center items-center gap-4 py-8">
+      <img src="./images/no-data.png" alt="no data" />
+      <p class="text-typo-primary nodata">No Data Found</p>
+    </div>
+  }
+</app-list-container>
+
+<app-modal
+  [title]="'Add Immunization'"
+  [loading]="creating()"
+  [isOpen]="isAddMedicationModalOpen"
+  [primaryButtonText]="'Save Immunization'"
+  [secondaryButtonText]="'Cancel'"
+  (primaryButtonClick)="saveChanges()"
+  (secondaryButtonClick)="toggleAddModal()"
+  (closeModal)="cancelAddModal()"
+>
+  <div class="flex flex-col gap-4">
+    <app-input
+      id="Immunization-name"
+      label="Immunization Name"
+      [required]="true"
+      [control]="vaccineName"
+      [errorMessage]="checkFieldErrors(immunizationFrom, 'vaccineName') ?? ''"
+      placeholder="Immunization name here"
+      class="w-full"
+    />
+    <div class="flex flex-col gap-2 items-start">
+      <label for="dosage-form">Add dosage</label>
+      <textarea
+        class="p-3 border h-[5rem] block w-full rounded-lg border-primary shadow-sm outline-none"
+        name="dosage"
+        id="dosage-form"
+        placeholder="Enter dosage here"
+        [formControl]="doseNumber"
+      ></textarea>
+    </div>
+  </div>
+</app-modal>

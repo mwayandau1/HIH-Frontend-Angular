@@ -1,0 +1,44 @@
+@if (isOpen() && pendingAction()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+    <div class="bg-white rounded-md p-6 w-96 shadow-xl text-center">
+      <h2 class="text-lg font-semibold text-gray-900 mb-2">
+        {{
+          confirmationAction() === 'delete'
+            ? 'Delete'
+            : pendingAction()?.active
+              ? 'Deactivate'
+              : 'Activate'
+        }}
+
+        {{ displayName() }}
+      </h2>
+      <p class="text-sm text-gray-600 mb-4">
+        Are you sure you want to
+        {{ confirmationAction() === 'delete' ? 'permanently delete' : 'change the status of' }}
+        <strong>{{ displayName() }}</strong
+        >?
+      </p>
+      <div class="flex justify-between gap-4">
+        <app-button
+          class="w-full"
+          customStyles="!w-full"
+          variant="secondary"
+          (clickEvent)="closeConfirmationModal.emit($event)"
+          title="cancel-confirmation"
+        >
+          Cancel
+        </app-button>
+        <app-button
+          [disabled]="loading()"
+          [loading]="loading()"
+          class="w-full"
+          customStyles="!w-full"
+          (clickEvent)="confirmAction.emit($event)"
+          title="cancel-confirmation"
+        >
+          Confirm
+        </app-button>
+      </div>
+    </div>
+  </div>
+}

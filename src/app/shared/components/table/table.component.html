@@ -1,0 +1,76 @@
+<table class="w-full">
+  <caption class="sr-only">
+    Table listing all registered users and their roles
+  </caption>
+  <thead>
+    <tr class="border-b border-gray-200 bg-tertiary-black">
+      @for (col of headCols(); track $index) {
+        <th class="text-left py-3 px-4 font-medium text-gray-700 text-sm">{{ col }}</th>
+      }
+    </tr>
+  </thead>
+  <tbody>
+    @if (data().length === 0) {
+      <tr>
+        <td [colSpan]="headCols().length" class="text-center py-8 text-gray-500">
+          No patients found
+        </td>
+      </tr>
+    } @else {
+      @for (patient of pageItems(); track $index) {
+        <tr class="border-gray-100 hover:bg-gray-50 transition-colors" [class.border-b]="!$last">
+          <td class="p-4 w-[25%] 2xl:w-[25%]">
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-secondary-black text-sm font-bold"
+              >
+                {{ getPatientInitials(patient.firstName, patient.lastName) }}
+              </div>
+              <span class="text-table-typo font-bold">
+                {{ patient.firstName }} {{ patient.lastName }}
+              </span>
+            </div>
+          </td>
+          <td class="p-4 text-gray-600 text-sm w-[15%] 2xl:w-[20%]">
+            {{ patient.id }}
+          </td>
+          <td class="p-4 text-gray-600 text-sm w-[15%] 2xl:w-[20%]">
+            {{ (patient.dateOfBirth | date: 'M/d/yyyy') || 'N/A' }}
+          </td>
+          <td class="p-4 text-gray-600 text-sm w-[20%] 2xl:w-[20%]">
+            {{ patient.phoneNumber }}
+          </td>
+          <td class="py-4 px-2">
+            <app-button
+              variant="secondary"
+              title="View Records"
+              customStyles="!py-2 text-sm w-full justify-center align-item flex"
+              [disabled]="isRequestingAction() || patient.status === 'PENDING'"
+              (clickEvent)="handleButtonAction(patient.id)"
+            >
+              @if (isRequestingAction() && processingState() === patient.id) {
+                <app-loader />
+              } @else {
+                <p>
+                  {{
+                    patient.status === 'PENDING'
+                      ? 'Pending'
+                      : patient.hasConsent
+                        ? 'View Records'
+                        : 'Request Access'
+                  }}
+                </p>
+              }
+            </app-button>
+          </td>
+        </tr>
+      }
+    }
+  </tbody>
+</table>
+<app-pagination
+  [numOfPages]="1"
+  [totalRecords]="0"
+  class="px-6 inline-block w-full mt-4"
+  [amountOnDisplay]="pageItems().length"
+/>

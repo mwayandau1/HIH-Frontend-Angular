@@ -1,0 +1,70 @@
+<app-modal
+  [loading]="updating() || gettingPermissions()"
+  [title]="isEditMode() ? 'Edit Role' : 'Create New Role'"
+  (closeModal)="onCloseModal()"
+  [isOpen]="isOpen()"
+  secondaryButtonText=" Cancel"
+  (secondaryButtonClick)="onCloseModal()"
+  [primaryButtonText]="isEditMode() ? 'Save Changes' : 'Add Role'"
+  (primaryButtonClick)="toggleAction()"
+>
+  @if (gettingPermissions()) {
+    <div class="flex justify-center items-center h-64">
+      <app-loader />
+    </div>
+  } @else {
+    @if (roleForm) {
+      <div class="flex justify-between gap-4 flex-col">
+        <app-input
+          id="roleName"
+          label="Role Name"
+          [required]="true"
+          [control]="nameControl"
+          [placeholder]="isEditMode() ? (role()?.name ?? 'Role Name') : 'Role Name'"
+          [errorMessage]="checkFieldError(roleForm, 'name') ?? ''"
+          class="w-full"
+        />
+
+        <div class="flex flex-col items-start text-sm w-full">
+          <label for="role-description"> Description <span class="text-red-700">*</span> </label>
+          <textarea
+            name="role-description"
+            id="role-description"
+            placeholder="Add role description"
+            [formControl]="descriptionControl"
+            class="text-primary-black text-sm p-3 h-40 w-full rounded-lg shadow-sm outline-none border"
+            [ngClass]="{
+              'border-primary': !checkFieldError(roleForm, 'description'),
+              'border-red-600': checkFieldError(roleForm, 'description'),
+            }"
+          ></textarea>
+          @if (checkFieldError(roleForm, 'description')) {
+            <span class="text-red-600 text-sm mt-1">
+              {{ checkFieldError(roleForm, 'description') }}
+            </span>
+          }
+        </div>
+
+        <div class="flex flex-col items-start">
+          <h2 class="text-primary-black">Permissions</h2>
+          <div class="flex flex-wrap gap-4">
+            @for (permission of permissions(); track permission.id) {
+              <ng-container>
+                <div class="flex items-center gap-2">
+                  <app-custom-checkbox
+                    [control]="getPermissionControl(permission.name)"
+                  ></app-custom-checkbox>
+                  <span class="text-sm">{{ formatPermissionName(permission.name) }}</span>
+                </div>
+              </ng-container>
+            }
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="flex justify-center items-center h-64">
+        <app-loader />
+      </div>
+    }
+  }
+</app-modal>

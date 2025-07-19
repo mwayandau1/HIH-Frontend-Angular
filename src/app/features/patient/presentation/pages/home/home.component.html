@@ -1,0 +1,33 @@
+<main class="px-4 md:px-10 lg:px-16 py-3 mb-20 flex flex-col">
+  <div class="flex gap-1 text-typo-active md:text-xl text-l font-bold">
+    <span>👋</span>
+    <p>Welcome</p>
+    @if (user()) {
+      <p>{{ user()?.firstName + ' ' + user()?.lastName }}</p>
+    }
+  </div>
+  <div class="grid gap-4 mt-4 md:grid-cols-4 grid-cols-2 justify-center items-center">
+    @for (card of cards(); track card.id) {
+      <div
+        class="flex flex-col gap-4 mt-2 text-typo-active border border-primary rounded-lg md:p-4 p-2 justify-center items-center text-center md:px-6 px-2 w-full md:max-w-72 h-full"
+      >
+        <div class="flex gap-2 justify-center items-center">
+          <div class="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
+            <img src="/images/{{ card.icon }}" alt="cardicon" />
+          </div>
+          <h2 class="md:font-bold lg:text-xl">{{ card.title }}</h2>
+        </div>
+        <p class="text-typo-primary text-xs md:text-base">{{ card.description }}</p>
+        <Button>
+          <a
+            [routerLink]="card.route"
+            class="text-secondary-black font-bold text-xs md:text-base flex items-center gap-2 mt-2"
+            >View
+            <span>details</span>
+            <img src="/images/arrow-right.svg" alt="cardicon"
+          /></a>
+        </Button>
+      </div>
+    }
+  </div>
+</main>

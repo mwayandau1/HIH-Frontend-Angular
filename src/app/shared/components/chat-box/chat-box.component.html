@@ -1,0 +1,132 @@
+@let iconColor = '#69533F';
+
+<div class="flex flex-col border border-primary rounded-md p-4">
+  <div class="border-b border-primary py-4 mb-4 flex items-center gap-4">
+    <div
+      class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-secondary-black text-sm font-bold"
+    >
+      {{ getProviderInitials(recipientName().split(' ')[0], recipientName().split(' ')[1]) }}
+    </div>
+    <div>
+      <h3 class="font-semibold tracking-wide">{{ recipientName() }}</h3>
+      <p class="text-sm" [ngClass]="isConnected() ? 'text-green-600' : 'text-gray-500'">
+        {{ isConnected() ? 'Online' : 'Offline' }}
+      </p>
+    </div>
+
+    <div class="flex items-center gap-8 ml-auto px-4">
+      <app-button
+        title="Video Call"
+        variant="tertiary"
+        customStyles="!p-0"
+        (clickEvent)="startVideoCall()"
+        [disabled]="!isConnected()"
+        (keydown)="noop($event)"
+      >
+        <lucide-icon [img]="icons.Video" [size]="20" [color]="iconColor" />
+      </app-button>
+
+      <app-button
+        title="Voice Call"
+        variant="tertiary"
+        customStyles="!p-0"
+        (clickEvent)="startVoiceCall()"
+        [disabled]="!isConnected()"
+        (keydown)="noop($event)"
+      >
+        <lucide-icon [img]="icons.Phone" [size]="20" [color]="iconColor" />
+      </app-button>
+    </div>
+  </div>
+
+  <div #messagesContainer class="flex flex-col gap-4 h-[70vh] overflow-y-auto">
+    <div class="mt-auto">
+      @for (message of sortedMessages(); track message.id) {
+        <app-chat-bubble
+          [message]="message"
+          [isOwn]="isOwnMessage(message)"
+          [name]="recipientName()"
+        />
+      }
+
+      @if (showSmartReplies() && !isLastMessageUsers()) {
+        <div class="flex gap-2 items-center overflow-x-auto justify-end">
+          @for (reply of smartReplies(); track reply) {
+            <app-button
+              [title]="reply"
+              customStyles="!text-xs !p-0 !px-2"
+              variant="secondary"
+              (clickEvent)="selectSmartReply(reply)"
+              class="smart-reply-button"
+            >
+              {{ reply }}
+            </app-button>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <app-typing-indicator [typingUsers]="typingUsers()" [name]="recipientName()" />
+
+  <form class="flex items-center justify-between" (submit)="$event.preventDefault(); sendMessage()">
+    <input
+      #fileInput
+      type="file"
+      style="display: none"
+      (change)="onFileSelected($event)"
+      accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif,.webp"
+    />
+
+    <app-button
+      title="Attach File"
+      variant="tertiary"
+      customStyles="!p-0"
+      (clickEvent)="selectFile()"
+      [disabled]="isUploadingFile()"
+      (keydown)="noop($event)"
+    >
+      <lucide-icon [img]="icons.Paperclip" [size]="20" [color]="iconColor" />
+    </app-button>
+
+    @if (isUploadingFile()) {
+      <div class="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 bg-gray-100 rounded-md">
+        <span class="animate-pulse">Uploading...</span>
+      </div>
+    }
+
+    <div class="flex items-center w-[97%]">
+      <app-input
+        id="message"
+        placeholder="Type your message here..."
+        [control]="messageContent()"
+        [hasIcon]="true"
+        iconPosition="right"
+        class="w-[95%]"
+        [isForChatBox]="true"
+        (input)="onMessageInput()"
+      >
+      </app-input>
+
+      <app-button
+        title="Send Message"
+        customStyles="mt-3 w-full !rounded-none !p-3 !h-12"
+        class="self-start"
+        [disabled]="messageContent().invalid || isSendingMessage() || !isConnected()"
+        (clickEvent)="sendMessage()"
+        (keydown)="noop($event)"
+      >
+        <lucide-icon [img]="icons.SendHorizontal" [size]="20" [color]="iconColor" />
+      </app-button>
+    </div>
+  </form>
+</div>
+
+@if (showCallModal()) {
+  <app-video-call-modal
+    [roomId]="roomId()"
+    [recipientName]="recipientName()"
+    [isVideoCall]="isVideoCallMode()"
+    (closeModal)="closeCallModal()"
+  />
+}

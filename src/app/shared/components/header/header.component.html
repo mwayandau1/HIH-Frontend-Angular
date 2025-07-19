@@ -1,0 +1,8 @@
+<header class="w-full flex items-center justify-between px-4 md:px-10 lg:px-16">
+  <img src="logo.png" alt="Health Zip Logo" class="h-24 w-24 -ml-3" />
+  <div class="flex items-center gap-2 ml-4">
+    <lucide-icon [img]="icons.Bell" [size]="20" color="#69533f" class="mr-2" />
+    <lucide-icon [img]="icons.CircleUserRound" [size]="20" color="#69533f" />
+    <p>{{ userInfo()?.firstName + ' ' + userInfo()?.lastName }}</p>
+  </div>
+</header>

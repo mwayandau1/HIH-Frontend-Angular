@@ -1,0 +1,33 @@
+<div
+  class="w-full flex items-center text-sm md:text-base rounded-md p-1"
+  [ngClass]="{
+    'bg-tab-bg text-inactive-tab-text justify-between': variant() === 'primary',
+    'bg-tertiary text-tab-secondary-active-typo mb-12 justify-between': variant() === 'secondary',
+    'bg-transparent border-b border-b-primary gap-8 text-tab-secondary-typo mb-4 !p-0 rounded-none':
+      variant() === 'tertiary',
+  }"
+>
+  @for (tab of tabs(); track $index) {
+    <button
+      [title]="tab.title()"
+      (click)="selectTab($index)"
+      class="capitalize"
+      [class]="variant() !== 'tertiary' ? 'py-1 rounded-md' : ''"
+      [ngClass]="
+        variant() === 'primary'
+          ? getCombinedClass($index)
+          : variant() === 'secondary'
+            ? getCombinedClass($index)
+            : {
+                'py-2 px-3': true,
+                'text-tab-secondary-active-typo font-bold border-b-2 border-b-primary border-hover':
+                  activeIndex() === $index,
+              }
+      "
+    >
+      {{ tab.title() }}
+    </button>
+  }
+</div>
+
+<ng-content select="app-tab"></ng-content>

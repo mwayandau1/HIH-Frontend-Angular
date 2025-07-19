@@ -1,0 +1,112 @@
+<div class="relative">
+  <form
+    class="border border-primary rounded-md p-4 pt-6"
+    [class.opacity-0]="isFetchingUserData() && !userInfo()"
+    [formGroup]="profileForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <app-settings-heading
+      title="Personal Information"
+      description="Update your personal and professional information"
+      [icon]="icons.User"
+    />
+
+    <div>
+      <div class="flex items-center justify-between">
+        <app-input
+          id="full-name-field"
+          label="Full Name"
+          class="w-[45%]"
+          [control]="profileForm.controls.fullName"
+          [errorMessage]="checkFieldErrors(profileForm, 'fullName') ?? ''"
+        />
+        <app-input
+          id="title-field"
+          label="Title"
+          class="w-[45%]"
+          [control]="profileForm.controls.title"
+          [errorMessage]="checkFieldErrors(profileForm, 'title') ?? ''"
+        />
+      </div>
+      <div class="flex items-center w-full justify-between">
+        <app-input
+          id="email-address-field"
+          label="Email Address"
+          class="w-[45%]"
+          [isDisabled]="true"
+          [control]="profileForm.controls.email"
+        />
+        <app-input
+          id="phone-number-field"
+          label="Phone Number"
+          class="w-[45%]"
+          [control]="profileForm.controls.phoneNumber"
+          [errorMessage]="checkFieldErrors(profileForm, 'phoneNumber') ?? ''"
+        />
+      </div>
+    </div>
+
+    <h3 class="text-2xl font-bold text-typo-active my-6">Professional Information</h3>
+
+    <div class="pt-3">
+      <div class="flex items-center justify-between">
+        <app-input
+          id="department-field"
+          label="Department"
+          class="w-[45%]"
+          [isDisabled]="true"
+          [control]="profileForm.controls.department"
+        />
+        <app-input
+          id="license-number-field"
+          label="License Number"
+          class="w-[45%]"
+          [isDisabled]="true"
+          [control]="profileForm.controls.licenseNumber"
+        />
+      </div>
+      <div>
+        <label for="" class="inline-block mb-3 text-sm">Professional Bio</label>
+        <textarea
+          class="w-full border border-primary rounded-md px-3 py-1 focus:outline-0 text-sm"
+          [class.border-red-500]="checkFieldErrors(profileForm, 'professionalBio')"
+          rows="4"
+          [formControl]="profileForm.controls.bio"
+        ></textarea>
+        <p class="text-red-500 text-xs">{{ checkFieldErrors(profileForm, 'professionalBio') }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-end gap-4 mt-4">
+      <app-button
+        title="Cancel"
+        variant="secondary"
+        class="w-40"
+        customStyles="w-full"
+        (clickEvent)="handleCancel()"
+        [disabled]="!profileForm.dirty"
+        >Cancel</app-button
+      >
+      <app-button
+        title="Save Changes"
+        class="w-40"
+        type="submit"
+        customStyles="w-full text-sm md:text-base  justify-center align-item flex"
+        [disabled]="!profileForm.dirty || isUpdatingInfo()"
+      >
+        @if (isUpdatingInfo()) {
+          <app-loader />
+        } @else {
+          <p>Save Changes</p>
+        }
+      </app-button>
+    </div>
+  </form>
+  @if (isFetchingUserData() && !userInfo()) {
+    <div
+      class="flex justify-center items-center absolute top-[30%] left-[50%] -translate-x-[50%] z-50 opacity-100"
+    >
+      <app-themed-loader />
+    </div>
+  }
+</div>

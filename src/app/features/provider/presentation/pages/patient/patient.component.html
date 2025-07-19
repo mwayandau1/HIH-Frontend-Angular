@@ -1,0 +1,102 @@
+<main class="px-6 py-12 flex flex-col gap-10 relative">
+  @if (isFetchingPatient()) {
+    <div class="h-screen flex justify-center items-center w-full">
+      <app-themed-loader />
+    </div>
+  } @else {
+    <div class="flex items-center justify-between">
+      <div class="flex flex-col gap-1">
+        <ul class="flex items-center gap-2 text-sm">
+          <li><a routerLink="/provider/patients">Patients</a></li>
+          <lucide-icon [img]="icons.ChevronRight" size="15" color="#69533F" />
+          <li>
+            <p class="font-bold">
+              {{
+                patient() ? patient()?.firstName + ' ' + patient()?.lastName : 'No Patient Found'
+              }}
+            </p>
+          </li>
+        </ul>
+        <h2 class="text-2xl 2xl:text-3xl font-bold text-typo-active">
+          {{ patient() ? patient()?.firstName + ' ' + patient()?.lastName : 'No Patient Found' }}
+        </h2>
+        <ul class="flex list-disc gap-5 text-sm">
+          <li class="list-none capitalize">
+            <p>{{ patient()?.gender?.toLowerCase() ?? 'N/A' }}</p>
+          </li>
+          <li>
+            <p>
+              {{
+                patient()?.dateOfBirth
+                  ? getAgeFromDOB(patient()?.dateOfBirth ?? '') + ' years old'
+                  : 'N/A'
+              }}
+            </p>
+          </li>
+          <li>
+            <p>
+              DOB:
+              {{
+                patient()?.dateOfBirth
+                  ? (patient()?.dateOfBirth ?? 'N/A' | date: 'MMM d, y')
+                  : 'Date of birth not available'
+              }}
+            </p>
+          </li>
+        </ul>
+      </div>
+      <div class="flex items-center justify-center gap-3">
+        <app-button
+          title="Message patient"
+          variant="secondary"
+          customStyles="text-sm"
+          (clickEvent)="handleMessagePatient()"
+          >Message Patient</app-button
+        >
+        @if (activeTab() !== 3) {
+          <app-button title="Add new note" customStyles="text-sm" [disabled]="!patient()"
+            >Add New Note</app-button
+          >
+        }
+      </div>
+    </div>
+
+    <app-tabs variant="tertiary">
+      <app-tab title="Summary">
+        @if (patient()) {
+          <app-patient-summary [patient]="patient()!" />
+        } @else {
+          <app-empty-inventory title="No Summary Available" />
+        }
+      </app-tab>
+      <app-tab title="Records">
+        @if (patient()) {
+          <app-user-records />
+        } @else {
+          <app-empty-inventory title="No Visits History Available" />
+        }
+      </app-tab>
+      <app-tab title="Visits">
+        @if (patient()) {
+          <app-patient-visits />
+        } @else {
+          <app-empty-inventory title="No Visits History Available" />
+        }
+      </app-tab>
+      <app-tab title="Notes">
+        @if (patient()) {
+          <app-patient-notes />
+        } @else {
+          <app-empty-inventory title="No Notes Available" />
+        }
+      </app-tab>
+      <app-tab title="Documents">
+        @if (patient()) {
+          <app-documents />
+        } @else {
+          <app-empty-inventory title="No Summary Available" />
+        }
+      </app-tab>
+    </app-tabs>
+  }
+</main>

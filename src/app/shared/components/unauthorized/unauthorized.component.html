@@ -1,0 +1,19 @@
+<main class="w-screen h-screen overflow-hidden flex justify-center items-center bg-bg py-16 px-12">
+  <div class="w-[50%] flex justify-center items-center">
+    <img src="/images/unauthorized.png" alt="unauthorized" class="w-[70%]" />
+  </div>
+  <div class="w-[50%] flex justify-start items-start">
+    <div class="w-[80%] flex items-center justify-center flex-col mb-12">
+      <img src="logo.png" alt="logo" class="w-48" />
+      <div class="flex flex-col gap-8 text-center">
+        <h1 class="text-4xl font-bold">Access Denied</h1>
+        <p>
+          You don’t have permission to view this feature. Contact your administrator for assistance
+        </p>
+        <app-button title="Go back" customStyles="w-full" (clickEvent)="handleNavigate()"
+          >Go Back</app-button
+        >
+      </div>
+    </div>
+  </div>
+</main>

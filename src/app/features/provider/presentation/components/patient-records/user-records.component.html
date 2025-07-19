@@ -1,0 +1,19 @@
+<div class="grid grid-cols-2 gap-6">
+  <div class="border border-primary rounded-xl">
+    <app-lab-results [patientId]="patientId()" />
+  </div>
+  <div class="border border-primary rounded-xl">
+    <app-medications [patientId]="patientId()" />
+  </div>
+
+  <div class="border border-primary rounded-xl">
+    <app-allergies-conditions [patientId]="patientId()" />
+  </div>
+
+  <div class="border border-primary rounded-xl">
+    <app-immunization [patientId]="patientId()" />
+  </div>
+  <div class="border border-primary rounded-xl">
+    <app-vitals-history [patientId]="patientId()" />
+  </div>
+</div>

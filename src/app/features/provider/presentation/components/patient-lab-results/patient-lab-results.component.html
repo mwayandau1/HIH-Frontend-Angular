@@ -1,0 +1,16 @@
+<div class="border border-primary rounded-md mt-6 w-full h-full">
+  <app-list-container icon="/images/lab-results-icon.svg" title="Recent Lab Results">
+    @for (result of labResults().slice(0, 3); track $index) {
+      <div class="flex justify-between items-center border-primary pt-7" [class.border-t]="!$first">
+        <div>
+          <p>{{ result.labTest }}</p>
+          <ul class="text-xs flex gap-5 list-disc">
+            <li class="list-none">Date: {{ result.resultDate | date: 'MMM d, y' }}</li>
+            <li>{{ result.value }}</li>
+          </ul>
+        </div>
+        <p class="self-start text-sm">{{ result.status }}</p>
+      </div>
+    }
+  </app-list-container>
+</div>

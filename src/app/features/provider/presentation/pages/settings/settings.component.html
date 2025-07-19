@@ -1,0 +1,18 @@
+<main class="px-6 py-12">
+  <div class="flex flex-col gap-2 mb-8">
+    <h1 class="text-3xl font-bold text-typo-active">Account Settings</h1>
+    <p class="text-sm text-primary-black">Manage your account settings and preferences</p>
+  </div>
+
+  <app-tabs variant="tertiary">
+    <app-tab title="Profile">
+      <app-profile-settings />
+    </app-tab>
+    <app-tab title="Notifications">
+      <app-notification-settings />
+    </app-tab>
+    <app-tab title="Security">
+      <app-security-settings />
+    </app-tab>
+  </app-tabs>
+</main>

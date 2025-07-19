@@ -1,0 +1,111 @@
+<div class="relative">
+  <form
+    class="border border-primary rounded-md p-4 pt-6"
+    [class.opacity-0]="isFetchingUserData() && !userInfo()"
+    [formGroup]="profileForm"
+    (ngSubmit)="onSubmit()"
+  >
+    <app-settings-heading
+      title="Personal Information"
+      description="Update your personal and professional information"
+      [icon]="icons.User"
+    />
+
+    <div>
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <app-input
+          id="first-name-field"
+          label="First Name"
+          class="w-full md:w-[45%]"
+          [control]="profileForm.controls.firstName"
+          [errorMessage]="checkFieldErrors(profileForm, 'firstName') ?? ''"
+        />
+        <app-input
+          id="last-name-field"
+          label="Last Name"
+          class="w-full md:w-[45%]"
+          [control]="profileForm.controls.lastName"
+          [errorMessage]="checkFieldErrors(profileForm, 'lastName') ?? ''"
+        />
+      </div>
+      <div class="flex flex-col md:flex-row items-center w-full justify-between">
+        <app-date-picker
+          class="w-full md:w-[45%]"
+          label="Date of Birth"
+          [control]="profileForm.controls.dateOfBirth"
+          id="date-of-birth-field"
+          [errorMessage]="checkFieldErrors(profileForm, 'dateOfBirth') ?? ''"
+        />
+        <app-input
+          id="gender-field"
+          label="Gender"
+          class="w-full md:w-[45%]"
+          [control]="profileForm.controls.gender"
+          [errorMessage]="checkFieldErrors(profileForm, 'gender') ?? ''"
+        />
+      </div>
+    </div>
+
+    <h3 class="text-xl md:text-2xl font-bold text-typo-active my-6">Contact Information</h3>
+
+    <div class="pt-3">
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <app-input
+          id="email-address-field"
+          label="Email Address"
+          class="w-full md:w-[45%]"
+          [isDisabled]="true"
+          [control]="profileForm.controls.email"
+          [errorMessage]="checkFieldErrors(profileForm, 'email') ?? ''"
+        />
+        <app-input
+          id="phone-number-field"
+          label="Phone Number"
+          class="w-full md:w-[45%]"
+          [control]="profileForm.controls.phoneNumber"
+          [errorMessage]="checkFieldErrors(profileForm, 'phoneNumber') ?? ''"
+        />
+      </div>
+      <div>
+        <app-input
+          id="home-address-field"
+          label="Home Address"
+          class="w-[45%]"
+          [control]="profileForm.controls.residentialAddress"
+          [errorMessage]="checkFieldErrors(profileForm, 'homeAddress') ?? ''"
+        />
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between md:justify-end gap-4 mt-6">
+      <app-button
+        title="Cancel"
+        variant="secondary"
+        customStyles="w-full text-sm md:text-base"
+        type="button"
+        (clickEvent)="handleCancel()"
+        [disabled]="!profileForm.dirty"
+        >Cancel</app-button
+      >
+      <app-button
+        title="Save Changes"
+        type="submit"
+        customStyles="w-full text-sm md:text-base justify-center align-item flex"
+        [disabled]="!profileForm.dirty || isUpdatingInfo() || profileForm.invalid"
+      >
+        @if (isUpdatingInfo()) {
+          <app-loader />
+        } @else {
+          <p>Save Changes</p>
+        }
+      </app-button>
+    </div>
+  </form>
+  @if (isFetchingUserData() && !userInfo()) {
+    <div
+      class="flex justify-center items-center absolute top-[30%] left-[50%] -translate-x-[50%] z-50 opacity-100"
+    >
+      <app-themed-loader />
+    </div>
+  }
+</div>

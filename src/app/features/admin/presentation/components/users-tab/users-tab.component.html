@@ -1,0 +1,272 @@
+<div class="p-1 bg-white rounded-xl mt-6 flex flex-col">
+  <div class="flex justify-between items-center">
+    <app-input
+      id="search-input"
+      [control]="searchTerm"
+      type="text"
+      className="w-96"
+      [hasIcon]="true"
+      iconPosition="left"
+      placeholder="Search by mail..."
+    >
+      <lucide-icon [img]="icons.Search" [size]="18" class="text-primary-black" />
+    </app-input>
+    <app-button
+      customStyles="text-sm px-10"
+      title="add-user"
+      (clickEvent)="showAddUserModal = true"
+    >
+      Add User
+    </app-button>
+  </div>
+  <div class="flex flex-col py-6 px-2">
+    <h2 class="font-bold text-xl text-gray-900">User Accounts</h2>
+    <p id="users-description" class="text-base text-gray-600">
+      Manage user accounts and their settings
+    </p>
+  </div>
+
+  <div class="flex flex-col justify-between h-full relative">
+    <table class="w-full" aria-label="User Accounts" aria-describedby="users-description">
+      <thead class="bg-tertiary-black">
+        <tr>
+          <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">
+            <div class="flex items-center">
+              <span>Name</span>
+            </div>
+          </th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">
+            <div class="flex items-center justify-between">
+              <span>Role</span>
+              @if (allRoles()) {
+                <app-button-dropdown
+                  className="top-9 w-44"
+                  [options]="sortRoles()"
+                  (itemSelected)="onSortSelected('role', $event)"
+                  clearId="All Roles"
+                />
+              }
+            </div>
+          </th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">
+            <div class="flex items-center justify-between">
+              <span>Department</span>
+              @if (options[1].items) {
+                <app-button-dropdown
+                  className="top-9 w-44"
+                  [options]="options[1].items"
+                  (itemSelected)="onSortSelected('department', $event)"
+                  clearId="All Departments"
+                />
+              }
+            </div>
+          </th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">
+            <div class="flex items-center justify-between">
+              <span>Status</span>
+              @if (options[2].items) {
+                <app-button-dropdown
+                  className="top-9 w-36"
+                  [options]="options[2].items"
+                  (itemSelected)="onSortSelected('active', $event)"
+                  clearId="All Status"
+                />
+              }
+            </div>
+          </th>
+          <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Action</th>
+        </tr>
+      </thead>
+
+      @if (fetching()) {
+        <tbody>
+          <tr>
+            <td colspan="5" class="text-center">
+              <div class="flex justify-center items-center h-64 w-full">
+                <app-loader />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      } @else {
+        @if (allUsers().length > 0) {
+          <tbody class="bg-white divide-y mb-44 divide-tertiary-black relative">
+            @for (user of allUsers(); track user.id; let userIndex = $index) {
+              <tr
+                (click)="selectUser(user)"
+                (keydown.enter)="selectUser(user)"
+                tabindex="0"
+                [class]="
+                  'hover:bg-gray-50 cursor-pointer transition-colors ' +
+                  (selectedUser?.id === user.id ? 'bg-blue-50' : '')
+                "
+              >
+                <td class="px-6 py-4 max-h-12">
+                  <div class="flex flex-col">
+                    <span class="font-medium text-gray-900"
+                      >{{ user.firstName }} {{ user.lastName }}</span
+                    >
+                    <span class="text-sm text-gray-500">{{ user.email }}</span>
+                  </div>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-700">
+                  {{ formatWord(user.roles[0].name) }}
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-700">
+                  {{ user.department !== 'NA' ? formatWord(user.department) : 'NA' }}
+                </td>
+                <td class="px-6 py-4">
+                  <span
+                    [class]="
+                      'w-16 h-8 flex text-center justify-center items-center rounded-full text-xs font-medium ' +
+                      (user.active
+                        ? 'bg-green-100 text-green-800 border border-green-300'
+                        : 'bg-red-100 text-red-800')
+                    "
+                  >
+                    {{ user.active ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td class="px-6 py-4">
+                  <button
+                    class="p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    (click)="toggleUserModal(user.id!, $event)"
+                  >
+                    <svg
+                      class="w-5 h-5 text-gray-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zM12 13a1 1 0 110-2 1 1 0 010 2zM12 20a1 1 0 110-2 1 1 0 010 2z"
+                      ></path>
+                    </svg>
+                  </button>
+                  @if (openModalUserId === user.id) {
+                    <div
+                      [ngClass]="
+                        allUsers().length < 2
+                          ? 'origin-top-right top-0'
+                          : isLastOrSecondToLast(userIndex)
+                            ? 'origin-bottom-right !bottom-16'
+                            : 'origin-top-right'
+                      "
+                      class="absolute right-0 z-20 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                    >
+                      <button
+                        class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                        (click)="editUser(user, $event)"
+                      >
+                        Edit User
+                      </button>
+                      <button
+                        class="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                        (click)="toggleUserAction(user, $event, 'toggle-status')"
+                      >
+                        {{ user.active ? 'Deactivate' : 'Activate' }} User
+                      </button>
+                      <button
+                        class="block w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-gray-100"
+                        (click)="toggleUserAction(user, $event, 'delete')"
+                      >
+                        Delete User
+                      </button>
+                    </div>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        } @else {
+          <tbody>
+            <tr>
+              <td colspan="5" class="text-center">
+                <div class="w-full flex-col flex justify-center items-center gap-4 py-8">
+                  <img src="./images/no-data.png" alt="no data" />
+                  <p class="text-typo-primary nodata">No Data Found</p>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        }
+      }
+    </table>
+    @if (numOfPages() > 1) {
+      <app-pagination
+        [totalRecords]="totalRecords()"
+        [numOfPages]="numOfPages()"
+        [amountOnDisplay]="allUsers().length"
+      />
+    }
+
+    <app-modal
+      [loading]="creating()"
+      [title]="showEditModal ? 'Edit User' : 'Add New User'"
+      [subTitle]="showEditModal ? 'Change User Information' : 'Add New User'"
+      [isOpen]="showEditModal || showAddUserModal"
+      (closeModal)="closeCreateUpdateModal()"
+      [primaryButtonText]="showEditModal ? 'Save Changes' : ' Create User'"
+      (primaryButtonClick)="handleUserSave()"
+    >
+      <div class="flex justify-between gap-4 flex-col">
+        <div class="flex justify-between gap-4">
+          <app-input
+            id="firstName"
+            [errorMessage]="checkFieldErrors(userForm, 'firstName') ?? ''"
+            label="First Name"
+            [required]="true"
+            [control]="firstName"
+            placeholder="First Name"
+            class="w-full"
+          />
+          <app-input
+            id="lastName"
+            label="Last Name"
+            [required]="true"
+            [control]="lastName"
+            placeholder="Last Name"
+            class="w-full"
+            [errorMessage]="checkFieldErrors(userForm, 'lastName') ?? ''"
+          />
+        </div>
+        <app-input
+          id="email"
+          [errorMessage]="checkFieldErrors(userForm, 'email') ?? ''"
+          label="Email"
+          [control]="email"
+          [required]="true"
+          className="w-full"
+          placeholder="Email"
+        />
+        <app-select-input
+          [options]="allRoles()"
+          [placeholder]="userPendingAction?.roles?.[0]?.name || 'Select Role'"
+          label="Select Role"
+          [control]="roleControl"
+          [required]="true"
+        />
+        <app-select-input
+          [options]="options[1].items"
+          [disabled]="department.disabled"
+          [placeholder]="department.value || 'Select Department'"
+          label="Department"
+          [control]="department"
+          [required]="isDepartmentRequired()"
+        />
+      </div>
+    </app-modal>
+
+    <app-confirm-modal
+      [loading]="updating()"
+      [isOpen]="showConfirmationModal"
+      [pendingAction]="userPendingAction"
+      (closeConfirmationModal)="closeConfirmationModal()"
+      (confirmAction)="confirmAction()"
+      [confirmationAction]="confirmationAction"
+    />
+  </div>
+</div>

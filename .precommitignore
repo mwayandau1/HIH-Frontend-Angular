@@ -1,0 +1,10 @@
+# .precommitignore
+.storybook/
+tsconfig.json
+tsconfig.doc.json
+jest.config.ts
+typings.d.ts
+src/apps/*/src/main.ts
+*.config.ts
+*.setup.ts
+*.d.ts

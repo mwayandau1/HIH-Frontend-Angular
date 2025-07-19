@@ -1,0 +1,13 @@
+<button (click)="closeModal.emit()">
+  <div class="fixed inset-0 bg-black/90 flex items-center justify-center z-[1000]">
+    <button (click)="$event.stopPropagation()">
+      <img [src]="imageUrl()" alt="preview" class="max-w-[90vw] max-h-[90vh] object-contain" />
+    </button>
+    <button
+      class="absolute top-5 right-5 bg-black/50 text-white p-2 rounded-full cursor-pointer"
+      (click)="closeModal.emit()"
+    >
+      <lucide-icon [img]="icons.X" [size]="24" />
+    </button>
+  </div>
+</button>

@@ -1,0 +1,64 @@
+<form
+  [formGroup]="notificationForm()"
+  class="border border-primary rounded-md p-4 pt-6 mb-3"
+  (ngSubmit)="onSubmit()"
+>
+  <app-settings-heading
+    title="Notification Settings"
+    description="Choose how and when you want to be notified"
+    [icon]="icons.Bell"
+  />
+
+  <div class="border border-primary rounded-lg p-4 pt-6 mb-3">
+    <app-settings-heading title="Email Notifications" />
+    @for (setting of userPreferences()?.EMAIL; track $index) {
+      <div class="flex items-center justify-between mb-4 gap-3">
+        <div>
+          <h6 class="font-bold">{{ getNotificationLabel(setting.type) }}</h6>
+          <p class="text-sm">{{ setting.description }}</p>
+        </div>
+        <app-slide-toggle [formControl]="returnControl(setting.type, true)" />
+      </div>
+    }
+  </div>
+
+  <div class="border border-primary rounded-lg p-4 pt-6 mb-3">
+    <app-settings-heading title="SMS Notifications" />
+    @for (setting of userPreferences()?.SMS; track $index) {
+      @if (setting.type !== 'PATIENT_MESSAGE') {
+        <div class="flex items-center justify-between mb-4 gap-3">
+          <div>
+            <h6 class="font-bold">{{ getNotificationLabel(setting.type) }}</h6>
+            <p class="text-sm">{{ setting.description }}</p>
+          </div>
+          <app-slide-toggle [formControl]="returnControl(setting.type, false)" />
+        </div>
+      }
+    }
+  </div>
+
+  <div class="flex items-center justify-end gap-4 mt-4">
+    <app-button
+      title="Cancel"
+      variant="secondary"
+      class="w-[40%] min-w-fit md:w-40"
+      customStyles="w-full text-sm md:text-base"
+      (clickEvent)="handleCancel()"
+      [disabled]="!notificationForm().dirty"
+      >Cancel</app-button
+    >
+    <app-button
+      title="Save Changes"
+      type="submit"
+      class="w-[40%]"
+      customStyles="w-full text-sm md:text-base flex justify-center items-center"
+      [disabled]="!notificationForm().dirty"
+    >
+      @if (isUpdating()) {
+        <app-loader />
+      } @else {
+        <p>Save Preferences</p>
+      }
+    </app-button>
+  </div>
+</form>

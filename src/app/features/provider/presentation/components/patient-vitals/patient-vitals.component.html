@@ -1,0 +1,40 @@
+<div
+  class="border border-primary rounded-md py-4 px-6 mt-6 w-full h-full flex flex-col gap-2 justify-between"
+>
+  @if (vitals()[0]) {
+    <h2 class="text-xl font-bold">Recent Vitals</h2>
+
+    <div class="flex flex-col gap-1">
+      <p class="text-sm">Blood Pressure</p>
+
+      <div class="flex gap-1 items-center">
+        <h4 class="font-bold text-xl">{{ vitals()[0].bloodPressure }}</h4>
+        <p class="text-sm">mmHg</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <p class="text-sm">Heart Rate</p>
+
+      <div class="flex gap-1 items-center">
+        <h4 class="font-bold text-xl">{{ vitals()[0].heartRate }}</h4>
+        <p class="text-sm">bpm</p>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <p class="text-sm">Body Temperature</p>
+      <div class="flex gap-1 items-center">
+        <h4 class="font-bold text-xl">
+          {{ vitals()[0].temperature }}
+        </h4>
+        <p class="text-sm">°F</p>
+      </div>
+    </div>
+
+    <p class="text-sm">Height: {{ vitals()[0].height }}</p>
+    <p class="text-sm">Weight: {{ vitals()[0].weight }} lbs</p>
+
+    <p class="text-sm">Recorded on {{ vitals()[0].recordedAt | date: 'MMM d, y' }}</p>
+  }
+</div>

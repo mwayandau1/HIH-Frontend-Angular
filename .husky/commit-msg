@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# . "$(dirname -- "$0")/_/husky.sh"
+
+# Colors for terminal output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[0;33m'
+NC='\033[0m' # No Color
+
+# Commit message guidelines
+echo "${YELLOW}Checking commit message format...${NC}"
+echo "${YELLOW}Commit message should follow conventional commits format:${NC}"
+echo "${YELLOW}  <type>[(scope)]: <description>${NC}"
+echo "${YELLOW}Examples:${NC}"
+echo "${YELLOW}  feat(<component>): add new patient dashboard${NC}"
+echo "${YELLOW}  fix(auth): resolve login redirect issue${NC}"
+echo "${YELLOW}  docs: update README with setup instructions${NC}"
+
+# Get the commit message
+commit_msg_file=$1
+commit_msg=$(cat "$commit_msg_file")
+
+# Skip check for merge commits
+if echo "$commit_msg" | grep -qiE "^Merge "; then
+  echo "${YELLOW}Merge commit detected. Skipping conventional commit check.${NC}"
+  exit 0
+fi
+
+# Regex pattern for conventional commits
+# Format: type(scope): description
+# Where type is: feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert
+conventional_pattern='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?: .{1,100}'
+
+if ! echo "$commit_msg" | grep -qE "$conventional_pattern"; then
+  echo "${RED}Error: Commit message does not follow conventional commit format.${NC}"
+  echo "${RED}Your commit message: ${NC}$commit_msg"
+  echo "${YELLOW}Please use the format: ${NC}<type>[(scope)]: <description>"
+  echo "${YELLOW}Types: ${NC}feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+  echo "${YELLOW}Example: ${NC}feat(user): add login functionality"
+  exit 1
+fi
+
+# Check for imperative mood (very basic check)
+imperative_check='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?: (add|update|remove|fix|implement|refactor|improve|optimize|document|test|revert|merge|bump)'
+
+if ! echo "$commit_msg" | grep -qiE "$imperative_check"; then
+  echo "${YELLOW}Warning: Consider using imperative mood (add/fix/update) in your commit message.${NC}"
+  echo "${YELLOW}Example: 'feat: add feature' instead of 'feat: added feature'${NC}"
+  # Not failing the commit for this warning
+fi
+
+# Check for capitalization of first letter in description
+capital_check='^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9-]+\))?: [A-Z]'
+
+if ! echo "$commit_msg" | grep -qE "$capital_check"; then
+  echo "${YELLOW}Warning: First letter of description should be capitalized.${NC}"
+  # Not failing the commit for this warning
+fi
+
+echo "${GREEN}Commit message format is valid!${NC}"
+exit 0

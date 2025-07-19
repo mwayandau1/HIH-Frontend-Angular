@@ -1,0 +1,59 @@
+<main class="flex">
+  <div
+    class="w-[25%] bg-tertiary flex flex-col items-center justify-start gap-4 border-r h-screen border-primary pb-6 2xl:pb-10"
+  >
+    <img src="logo.png" alt="Health Zip Logo" class="w-24 h-24" />
+    <ul class="flex flex-col gap-2 w-[80%] 2xl:gap-3">
+      @for (link of links(); track $index) {
+        <li
+          [routerLink]="link.route"
+          routerLinkActive="bg-primary rounded-md text-typo-active font-bold"
+          [routerLinkActiveOptions]="
+            link.route === '/provider' || link.route === '/admin'
+              ? { exact: true }
+              : { exact: false }
+          "
+          class="px-4 py-3 flex items-center gap-2 cursor-pointer text-sm 2xl:text-base"
+        >
+          <lucide-icon [img]="link.icon" [size]="20" color="#69533f" />
+          <a>{{ link.label }}</a>
+        </li>
+      }
+    </ul>
+
+    <div class="flex flex-col items-center justify-center mt-auto w-[80%]">
+      <div class="flex items-center gap-3 w-full">
+        <img src="/images/doctor.jpg" alt="user's profile" class="w-11 h-11 rounded-full mt-4" />
+        <div>
+          <p class="text-center text-sm font-semibold mt-2">
+            {{ userInfo() ? 'Dr. ' + userInfo()?.firstName + ' ' + userInfo()?.lastName : 'N/A' }}
+          </p>
+          <p class="text-xs">Cardiologist</p>
+        </div>
+      </div>
+      <app-button
+        title="Logout"
+        customStyles="!w-full mt-4 !flex !items-center !justify-center !gap-2"
+        class="w-full"
+        (clickEvent)="handleLogout()"
+      >
+        <lucide-icon [img]="icons.LogOut" [size]="20" color="#69533f" class="inline" />
+        <p class="inline">Logout</p>
+      </app-button>
+    </div>
+  </div>
+  <section class="w-[80%]">
+    <header
+      class="flex justify-end items-center py-4 px-20 border-b border-primary gap-4 bg-tertiary"
+    >
+      <lucide-icon [img]="icons.Bell" [size]="20" color="#69533f" />
+      <div class="flex items-center gap-2 ml-4">
+        <lucide-icon [img]="icons.CircleUserRound" [size]="20" color="#69533f" />
+        <p>{{ userInfo()?.lastName ?? 'N/A' }}</p>
+      </div>
+    </header>
+    <div class="overflow-y-scroll h-[calc(100vh-64px)]" #scrollContainer>
+      <router-outlet />
+    </div>
+  </section>
+</main>

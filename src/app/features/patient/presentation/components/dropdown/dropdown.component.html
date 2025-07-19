@@ -1,0 +1,46 @@
+<div class="relative inline-block" #dropdownContainer>
+  <button
+    class="flex items-center gap-2 w-40 py-2 px-4 h-11 justify-between text-sm font-medium text-gray-700 bg-white border border-primary rounded-md shadow-sm hover:bg-gray-50"
+    (click)="toggleDropdown()"
+    type="button"
+    aria-haspopup="true"
+    [attr.aria-expanded]="isOpen"
+  >
+    <span class="truncate">{{ selected()?.label ?? 'All' }}</span>
+    <div class="transition-transform duration-200 flex justify-center" [class.rotate-180]="isOpen">
+      <lucide-icon
+        strokeWidth="2px"
+        [img]="arrow"
+        class="w-full h-6 text-secondary-black"
+      ></lucide-icon>
+    </div>
+  </button>
+  @if (isOpen) {
+    <button
+      [class]="className()"
+      class="absolute flex gap-1 flex-col p-2 right-0 z-10 w-40 origin-top-right bg-active-tab-text rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+      role="menu"
+      aria-orientation="vertical"
+      tabindex="-1"
+    >
+      @for (item of options(); let i = $index; track item.id) {
+        <button
+          [ngClass]="{
+            'bg-primary rounded-md':
+              selected()?.id === item.id || (selected() === null && item.id === 'ALL'),
+            'text-typo-primary': selected()?.id !== item.id,
+          }"
+          class="block truncate w-full px-4 py-3 text-base text-left text-typo-primary"
+          role="menuitem"
+          tabindex="-1"
+          (click)="selectItem(item)"
+        >
+          {{ formatWord(item.label) }}
+        </button>
+        @if (i < options().length - 1) {
+          <span class="block border-b border-gray-300 my-1"></span>
+        }
+      }
+    </button>
+  }
+</div>

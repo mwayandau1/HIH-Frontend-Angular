@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  admin-app:
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile.admin
+    ports:
+      - '4201:80'
+
+  patient-app:
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile.patient
+    ports:
+      - '4202:80'
+
+  provider-app:
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile.provider
+    ports:
+      - '4203:80'

@@ -1,0 +1,311 @@
+import {
+  SortGroup,
+  User,
+  UserRecord,
+  UserMedicationRecord,
+  AllegiesAndConditions,
+  PatientImmunization,
+  PatientVitals,
+} from '@shared/models';
+
+export const mockedUsers: User[] = [
+  {
+    id: 1,
+    firstName: 'John',
+    lastName: 'Smith',
+    email: 'john.smith@medconnect.com',
+    roles: [{ name: 'Doctor' }],
+    department: 'Cardiology',
+    contact: '020-345-6789',
+    active: true,
+  },
+  {
+    id: 2,
+    firstName: 'Jane',
+    lastName: 'Doe',
+    email: 'jane.doe@medconnect.com',
+    roles: [{ name: 'Doctor' }],
+    department: 'Cardiology',
+    contact: '050-876-5432',
+    active: true,
+  },
+  {
+    id: 3,
+    firstName: 'Susan',
+    lastName: 'Williams',
+    email: 's.williams@medconnect.com',
+    roles: [{ name: 'Doctor' }],
+    department: 'Pediatrics',
+    contact: '024-123-9876',
+    active: true,
+  },
+  {
+    id: 4,
+    firstName: 'Robert',
+    lastName: 'Johnson',
+    email: 'robert.johnson@medconnect.com',
+    roles: [{ name: 'Patient' }],
+    department: 'Orthopedics',
+    contact: '020-999-1234',
+    active: true,
+  },
+  {
+    id: 5,
+    firstName: 'Emily',
+    lastName: 'Davis',
+    email: 'emily.davis@medconnect.com',
+    roles: [{ name: 'Patient' }],
+    department: 'Orthopedics',
+    contact: '050-321-9876',
+    active: true,
+  },
+  {
+    id: 6,
+    firstName: 'Michael',
+    lastName: 'Brown',
+    email: 'michael.brown@medconnect.com',
+    roles: [{ name: 'Lab Practitioner' }],
+    department: 'Pediatrics',
+    contact: '024-555-1212',
+    active: true,
+  },
+  {
+    id: 7,
+    firstName: 'Sarah',
+    lastName: 'Miller',
+    email: 'sarah.miller@medconnect.com',
+    roles: [{ name: 'Nurse' }],
+    department: 'Cardiology',
+    contact: '050-234-1234',
+    active: true,
+  },
+  {
+    id: 8,
+    firstName: 'Chris',
+    lastName: 'Evans',
+    email: 'chris.evans@medconnect.com',
+    roles: [{ name: 'Patient' }],
+    department: 'Cardiology',
+    contact: '024-000-9999',
+    active: true,
+  },
+  {
+    id: 9,
+    firstName: 'Anna',
+    lastName: 'Taylor',
+    email: 'anna.taylor@medconnect.com',
+    roles: [{ name: 'Doctor' }],
+    department: 'Orthopedics',
+    contact: '020-888-0000',
+    active: true,
+  },
+  {
+    id: 10,
+    firstName: 'Mark',
+    lastName: 'White',
+    email: 'mark.white@medconnect.com',
+    roles: [{ name: 'Doctor' }],
+    department: 'Pediatrics',
+    contact: '050-444-2222',
+    active: true,
+  },
+  {
+    id: 11,
+    firstName: 'Lisa',
+    lastName: 'Green',
+    email: 'lisa.green@medconnect.com',
+    roles: [{ name: 'Lab Practitioner' }],
+    department: 'Cardiology',
+    contact: '024-222-3333',
+    active: true,
+  },
+  {
+    id: 12,
+    firstName: 'Daniel',
+    lastName: 'Clark',
+    email: 'daniel.clark@medconnect.com',
+    roles: [{ name: 'Nurse' }],
+    department: 'Pediatrics',
+    contact: '020-111-5555',
+    active: true,
+  },
+];
+export const mockedUserImmunization: PatientImmunization[] = [
+  {
+    id: 1,
+    title: 'Influenza (Flu)',
+    date: '2022-01-01',
+    desc: 'Annual vaccination',
+  },
+  {
+    id: 2,
+    title: 'Tetanus, Diphtheria, Pertussis (Tdap)',
+    date: '2022-01-01',
+    desc: '10-year booster',
+  },
+  {
+    id: 3,
+    title: 'Lipid Panel',
+    date: '2022-01-01',
+    desc: 'LDL: 135 mg/dL (Target: <100 mg/dL)',
+  },
+  {
+    id: 4,
+    title: 'COVID-19',
+    date: '2022-01-01',
+    desc: 'Completed primary series and 1 booster',
+  },
+];
+
+export const mockedUserVitals: PatientVitals[] = [
+  {
+    id: 1,
+    title: 'Blood Pressure',
+    dosage: {
+      amount: '128/82',
+      unit: 'mmHg',
+    },
+    state: 'Normal',
+  },
+  {
+    id: 2,
+    title: 'Heart Rate',
+    dosage: {
+      amount: '130',
+      unit: 'bpm',
+    },
+    state: 'Normal',
+  },
+  {
+    id: 3,
+    title: 'Blood Glucose',
+    dosage: {
+      amount: '130',
+      unit: 'mg/dL',
+    },
+    state: 'Normal',
+  },
+];
+export const sortOptions: SortGroup[] = [
+  {
+    groupLabel: 'Role',
+    items: [
+      { id: 'Patient', label: 'Patients' },
+      { id: 'Doctor', label: 'Doctor' },
+      { id: 'Nurse', label: 'Nurse' },
+      { id: 'Lab Practitioner', label: 'Lab Practitioner' },
+    ],
+  },
+  {
+    groupLabel: 'Department',
+    items: [
+      { id: 'ENDOCRINOLOGY', label: 'Endocrinology' },
+      { id: 'GASTROENTEROLOGY', label: 'Gastroenterology' },
+      { id: 'HEMATOLOGY', label: 'Hematology' },
+      { id: 'CARDIOLOGY', label: 'Cardiology' },
+      { id: 'INFECTIOUS_DISEASE', label: 'Infectious Disease' },
+      { id: 'NEPHROLOGY', label: 'Nephrology' },
+      { id: 'ONCOLOGY', label: 'Oncology' },
+      { id: 'PULMONOLOGY', label: 'Pulmonology' },
+      { id: 'RHEUMATOLOGY', label: 'Rheumatology' },
+      { id: 'GERIATRICS', label: 'Geriatrics' },
+      { id: 'PEDIATRICS', label: 'Pediatrics' },
+      { id: 'OBSTETRICS_AND_GYNECOLOGY', label: 'Obstetrics and Gynecology' },
+      { id: 'NEUROSURGERY', label: 'Neurosurgery' },
+      { id: 'ORTHOPEDIC_SURGERY', label: 'Orthopedic Surgery' },
+      { id: 'PLASTIC_SURGERY', label: 'Plastic Surgery' },
+      { id: 'UROLOGY', label: 'Urology' },
+      { id: 'OTOLARYNGOLOGY', label: 'Otolaryngology' },
+      { id: 'OPHTHALMOLOGY', label: 'Ophthalmology' },
+      { id: 'VASCULAR_SURGERY', label: 'Vascular Surgery' },
+      { id: 'RADIOLOGY', label: 'Radiology' },
+      { id: 'PATHOLOGY', label: 'Pathology' },
+      { id: 'NUCLEAR_MEDICINE', label: 'Nuclear Medicine' },
+      { id: 'PSYCHIATRY', label: 'Psychiatry' },
+      { id: 'DERMATOLOGY', label: 'Dermatology' },
+      { id: 'ANESTHESIOLOGY', label: 'Anesthesiology' },
+    ],
+  },
+  {
+    groupLabel: 'Status',
+    items: [
+      { id: true, label: 'Active' },
+      { id: false, label: 'Inactive' },
+    ],
+  },
+];
+
+export const mockedUserLabResults: UserRecord[] = [
+  {
+    id: 1,
+    title: 'Comprehensive Metabolic Panel',
+    date: '2022-01-01',
+    state: 'Normal',
+    desc: 'This is a comprehensive metabolic panel',
+  },
+  {
+    id: 2,
+    title: 'Complete Blood Count',
+    date: '2022-01-01',
+    state: 'Normal',
+    desc: 'This is a complete blood count',
+  },
+  {
+    id: 3,
+    title: 'Blood Chemistry',
+    date: '2022-01-01',
+    state: 'Normal',
+    desc: 'This is a blood chemistry',
+  },
+];
+
+export const mockedUserMedications: UserMedicationRecord[] = [
+  {
+    id: 1,
+    title: 'Lisinopril',
+    dose: '10mg',
+    routine: 'Once daily',
+    startDate: 'Jan 15, 2022',
+  },
+  {
+    id: 2,
+    title: 'Metformin',
+    dose: '500mg',
+    routine: 'Twice daily',
+    startDate: 'Jan 15, 2022',
+  },
+  {
+    id: 3,
+    title: 'Atorvastatin',
+    dose: '50mg',
+    routine: 'Once daily at bedtime',
+    startDate: 'Jan 15, 2022',
+  },
+  {
+    id: 4,
+    title: 'Lisinopril',
+    dose: '10mg',
+    routine: 'Once daily',
+    startDate: 'Jan 15, 2022',
+  },
+];
+
+export const allergies: AllegiesAndConditions[] = [
+  {
+    id: 1,
+    name: 'Peanut',
+  },
+  { id: 2, name: 'Tree nut' },
+  { id: 3, name: 'Fish' },
+  { id: 4, name: 'Shellfish' },
+];
+
+export const conditions: AllegiesAndConditions[] = [
+  {
+    id: 5,
+    name: 'Hypertension',
+  },
+  { id: 6, name: 'Diabetes' },
+  { id: 7, name: 'Asthma' },
+  { id: 8, name: 'Chronic kidney disease' },
+];

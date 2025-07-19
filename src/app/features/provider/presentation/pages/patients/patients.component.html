@@ -1,0 +1,62 @@
+<main class="px-6 py-12">
+  <div class="flex justify-between items-center">
+    <app-settings-heading
+      title="Patient Search"
+      description="Search for patients across connected hospitals"
+    />
+    <app-button
+      id="chat-room-btn"
+      title="Go to messages"
+      customStyles="flex items-center gap-2"
+      (clickEvent)="handleNavigateToChatRoom()"
+    >
+      <span>Go to Messages</span>
+      <lucide-icon [img]="icons.ArrowRight" [size]="18" color="#342721" />
+    </app-button>
+  </div>
+
+  <div class="border border-primary rounded-md px-4 py-5 flex flex-col gap-3">
+    <div class="flex flex-col gap-1">
+      <h2 class="text-xl font-bold">Find Patient</h2>
+      <p class="text-sm">Enter a patient's name, ID, or other details to begin</p>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <app-input
+        id="patient-search-field"
+        placeholder="Search patients..."
+        [hasIcon]="true"
+        [control]="searchKeyword()"
+        (keyEvent)="handlePatientSearch()"
+        iconPosition="left"
+        class="w-[80%] 2xl:w-[85%]"
+      >
+        <lucide-icon [img]="icons.Search" [size]="18" color="#7c7c7c" />
+      </app-input>
+
+      <app-filter-input
+        class="w-[17%] 2xl:w-[12%]"
+        [filterOptions]="filters()"
+        (selectedValue)="onFilterChange($event)"
+      />
+    </div>
+  </div>
+
+  <div class="bg-active-tab-text mt-4 p-4 flex gap-2 items-center">
+    <img src="/images/people.svg" alt="people icon" />
+    <p class="text-lg font-bold">Patients</p>
+  </div>
+
+  @if (isFetchingPatients()) {
+    <div class="flex justify-center items-center mt-20">
+      <app-themed-loader />
+    </div>
+  } @else {
+    <app-table
+      [headCols]="headColumns"
+      [data]="patients()"
+      (action)="handleViewRecords($event)"
+      [isRequestingAction]="isActionPending()"
+    />
+  }
+</main>

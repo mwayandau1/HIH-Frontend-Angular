@@ -1,0 +1,1446 @@
+{
+  "pipes": [],
+  "interfaces": [
+    {
+      "name": "Toast",
+      "id": "interface-Toast-c07239da29ba0ef7071d070f6147fdcf0c0c3e6bc25c27e58883df5d5d162671a3031b8703270853e26c86d0984855ab7e995e38d5d17f4f63f48808537d2a3c",
+      "file": "src/libs/models/toast.ts",
+      "deprecated": false,
+      "deprecationMessage": "",
+      "type": "interface",
+      "sourceCode": "export interface Toast {\n  title: string;\n  message?: string;\n  type: ToastType;\n  id: number;\n  triggerBy?: {\n    name: string;\n    imageSrc: string;\n  };\n  actions?: ToastAction[];\n}\n\nexport interface ToastAction {\n  label: string;\n  onClick: () => void;\n}\n\nexport type ToastType = 'success' | 'error' | 'info' | 'warning';\n",
+      "properties": [
+        {
+          "name": "actions",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ToastAction[]",
+          "indexKey": "",
+          "optional": true,
+          "description": "",
+          "line": 10
+        },
+        {
+          "name": "id",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "number",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 5
+        },
+        {
+          "name": "message",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "string",
+          "indexKey": "",
+          "optional": true,
+          "description": "",
+          "line": 3
+        },
+        {
+          "name": "title",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "string",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 2
+        },
+        {
+          "name": "triggerBy",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "literal type",
+          "indexKey": "",
+          "optional": true,
+          "description": "",
+          "line": 6
+        },
+        {
+          "name": "type",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ToastType",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 4
+        }
+      ],
+      "indexSignatures": [],
+      "kind": 171,
+      "methods": [],
+      "extends": []
+    },
+    {
+      "name": "ToastAction",
+      "id": "interface-ToastAction-c07239da29ba0ef7071d070f6147fdcf0c0c3e6bc25c27e58883df5d5d162671a3031b8703270853e26c86d0984855ab7e995e38d5d17f4f63f48808537d2a3c",
+      "file": "src/libs/models/toast.ts",
+      "deprecated": false,
+      "deprecationMessage": "",
+      "type": "interface",
+      "sourceCode": "export interface Toast {\n  title: string;\n  message?: string;\n  type: ToastType;\n  id: number;\n  triggerBy?: {\n    name: string;\n    imageSrc: string;\n  };\n  actions?: ToastAction[];\n}\n\nexport interface ToastAction {\n  label: string;\n  onClick: () => void;\n}\n\nexport type ToastType = 'success' | 'error' | 'info' | 'warning';\n",
+      "properties": [
+        {
+          "name": "label",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "string",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 14
+        },
+        {
+          "name": "onClick",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "function",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 15
+        }
+      ],
+      "indexSignatures": [],
+      "kind": 171,
+      "methods": [],
+      "extends": []
+    }
+  ],
+  "injectables": [
+    {
+      "name": "ToastService",
+      "id": "injectable-ToastService-53727017dc92a4ba24b02ba95cf8362aabb7034eccda55f5fbfaa5d0223f689913457e1eeb8240cd80224d98560502b9235760eee2fef9a143a597ae4ae66714",
+      "file": "src/libs/core/services/toast/toast.service.ts",
+      "properties": [
+        {
+          "name": "toastRef",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ToastComponent",
+          "indexKey": "",
+          "optional": true,
+          "description": "",
+          "line": 9,
+          "modifierKind": [123]
+        }
+      ],
+      "methods": [
+        {
+          "name": "register",
+          "args": [
+            {
+              "name": "toast",
+              "type": "ToastComponent",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 11,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "modifierKind": [125],
+          "jsdoctags": [
+            {
+              "name": "toast",
+              "type": "ToastComponent",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        },
+        {
+          "name": "show",
+          "args": [
+            {
+              "name": "title",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": ""
+            },
+            {
+              "name": "type",
+              "type": "ToastType",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "defaultValue": "'info'"
+            },
+            {
+              "name": "message",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "optional": true
+            },
+            {
+              "name": "actions",
+              "type": "ToastAction[]",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "optional": true
+            },
+            {
+              "name": "triggerBy",
+              "type": "literal type",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "optional": true
+            }
+          ],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 15,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "modifierKind": [125],
+          "jsdoctags": [
+            {
+              "name": "title",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            },
+            {
+              "name": "type",
+              "type": "ToastType",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "defaultValue": "'info'",
+              "tagName": {
+                "text": "param"
+              }
+            },
+            {
+              "name": "message",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "optional": true,
+              "tagName": {
+                "text": "param"
+              }
+            },
+            {
+              "name": "actions",
+              "type": "ToastAction[]",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "optional": true,
+              "tagName": {
+                "text": "param"
+              }
+            },
+            {
+              "name": "triggerBy",
+              "type": "literal type",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "optional": true,
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        }
+      ],
+      "deprecated": false,
+      "deprecationMessage": "",
+      "description": "",
+      "rawdescription": "\n",
+      "sourceCode": "import { Injectable } from '@angular/core';\nimport { ToastComponent } from '@shared/components/toast/toast.component';\nimport { ToastAction, ToastType } from '@shared/models/toast';\n\n@Injectable({\n  providedIn: 'root',\n})\nexport class ToastService {\n  private toastRef?: ToastComponent;\n\n  public register(toast: ToastComponent) {\n    this.toastRef = toast;\n  }\n\n  public show(\n    title: string,\n    type: ToastType = 'info',\n    message?: string,\n    actions?: ToastAction[],\n    triggerBy?: { name: string; imageSrc: string },\n  ) {\n    this.toastRef?.addMessage({ title, message, type, actions, triggerBy });\n  }\n}\n",
+      "extends": [],
+      "type": "injectable"
+    }
+  ],
+  "guards": [],
+  "interceptors": [],
+  "classes": [],
+  "directives": [],
+  "components": [
+    {
+      "name": "AppComponent",
+      "id": "component-AppComponent-11c6e02af9bdeb17a2c4c0e6725b0b8b8919a284bf14a52e9316443d607951814665ce0b1b30b590cf87e15d3b5058a75cafa900e95693b6d54342aa5f86d989",
+      "file": "src/apps/admin/src/app/app.component.ts",
+      "encapsulation": [],
+      "entryComponents": [],
+      "inputs": [],
+      "outputs": [],
+      "providers": [],
+      "selector": "app-root",
+      "styleUrls": [],
+      "styles": [],
+      "templateUrl": ["./app.component.html"],
+      "viewProviders": [],
+      "hostDirectives": [],
+      "inputsClass": [],
+      "outputsClass": [],
+      "propertiesClass": [
+        {
+          "name": "toast",
+          "defaultValue": "viewChild(ToastComponent)",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 13,
+          "modifierKind": [123, 148]
+        },
+        {
+          "name": "toastService",
+          "defaultValue": "inject(ToastService)",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 12,
+          "modifierKind": [123, 148]
+        }
+      ],
+      "methodsClass": [
+        {
+          "name": "ngAfterViewInit",
+          "args": [],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 15,
+          "deprecated": false,
+          "deprecationMessage": ""
+        }
+      ],
+      "deprecated": false,
+      "deprecationMessage": "",
+      "hostBindings": [],
+      "hostListeners": [],
+      "standalone": true,
+      "imports": [
+        {
+          "name": "ToastComponent",
+          "type": "component"
+        }
+      ],
+      "description": "",
+      "rawdescription": "\n",
+      "type": "component",
+      "sourceCode": "import { AfterViewInit, Component, inject, viewChild } from '@angular/core';\nimport { ToastComponent } from '@shared/components/toast/toast.component';\nimport { ToastService } from '@core/services/toast/toast.service';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  templateUrl: './app.component.html',\n  imports: [ToastComponent],\n})\nexport class AppComponent implements AfterViewInit {\n  private readonly toastService = inject(ToastService);\n  private readonly toast = viewChild(ToastComponent);\n\n  ngAfterViewInit(): void {\n    this.toastService.register(this.toast() as ToastComponent);\n  }\n}\n",
+      "assetsDirs": [],
+      "styleUrlsData": "",
+      "stylesData": "",
+      "extends": [],
+      "implements": ["AfterViewInit"],
+      "templateData": "<h1>Hello Admin</h1>\r\n<app-toast />\r\n"
+    },
+    {
+      "name": "AppComponent",
+      "id": "component-AppComponent-f17585302a7f5f0900a39181f7d8ac0b4c1ab43ebfbaed1ce1f16ff14e74fa701ae5b9ec7d1af64a0cb112ce5003254a2ca2a61b173895aab9cd7750cdded993-1",
+      "file": "src/apps/patient/src/app/app.component.ts",
+      "encapsulation": [],
+      "entryComponents": [],
+      "inputs": [],
+      "outputs": [],
+      "providers": [],
+      "selector": "app-root",
+      "styleUrls": [],
+      "styles": [],
+      "templateUrl": ["./app.component.html"],
+      "viewProviders": [],
+      "hostDirectives": [],
+      "inputsClass": [],
+      "outputsClass": [],
+      "propertiesClass": [],
+      "methodsClass": [],
+      "deprecated": false,
+      "deprecationMessage": "",
+      "hostBindings": [],
+      "hostListeners": [],
+      "standalone": true,
+      "imports": [],
+      "description": "",
+      "rawdescription": "\n",
+      "type": "component",
+      "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  templateUrl: './app.component.html',\n})\nexport class AppComponent {}\n",
+      "assetsDirs": [],
+      "styleUrlsData": "",
+      "stylesData": "",
+      "extends": [],
+      "isDuplicate": true,
+      "duplicateId": 1,
+      "duplicateName": "AppComponent-1",
+      "templateData": "<h1>Hello Quavo</h1>\n"
+    },
+    {
+      "name": "AppComponent",
+      "id": "component-AppComponent-f17585302a7f5f0900a39181f7d8ac0b4c1ab43ebfbaed1ce1f16ff14e74fa701ae5b9ec7d1af64a0cb112ce5003254a2ca2a61b173895aab9cd7750cdded993-2",
+      "file": "src/apps/provider/src/app/app.component.ts",
+      "encapsulation": [],
+      "entryComponents": [],
+      "inputs": [],
+      "outputs": [],
+      "providers": [],
+      "selector": "app-root",
+      "styleUrls": [],
+      "styles": [],
+      "templateUrl": ["./app.component.html"],
+      "viewProviders": [],
+      "hostDirectives": [],
+      "inputsClass": [],
+      "outputsClass": [],
+      "propertiesClass": [],
+      "methodsClass": [],
+      "deprecated": false,
+      "deprecationMessage": "",
+      "hostBindings": [],
+      "hostListeners": [],
+      "standalone": true,
+      "imports": [],
+      "description": "",
+      "rawdescription": "\n",
+      "type": "component",
+      "sourceCode": "import { Component } from '@angular/core';\n\n@Component({\n  selector: 'app-root',\n  standalone: true,\n  templateUrl: './app.component.html',\n})\nexport class AppComponent {}\n",
+      "assetsDirs": [],
+      "styleUrlsData": "",
+      "stylesData": "",
+      "extends": [],
+      "isDuplicate": true,
+      "duplicateId": 2,
+      "duplicateName": "AppComponent-2",
+      "templateData": "<h1 class=\"text-red-500\">Hello from the Provider</h1>\n"
+    },
+    {
+      "name": "ButtonComponent",
+      "id": "component-ButtonComponent-d83d4ed800e77b9e1d380f7af266358cb55649a44c4deb5b0bdbd2a2c3954533200905a80052c38d41c1bbadd01860dada61ad6657c778bb017ba7ecdcf52aef",
+      "file": "src/libs/components/button/button.component.ts",
+      "changeDetection": "ChangeDetectionStrategy.OnPush",
+      "encapsulation": [],
+      "entryComponents": [],
+      "inputs": [],
+      "outputs": [],
+      "providers": [],
+      "selector": "app-button",
+      "styleUrls": [],
+      "styles": [],
+      "templateUrl": ["./button.component.html"],
+      "viewProviders": [],
+      "hostDirectives": [],
+      "inputsClass": [
+        {
+          "name": "disabled",
+          "defaultValue": "false",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 12,
+          "modifierKind": [125, 148],
+          "required": false
+        },
+        {
+          "name": "title",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 14,
+          "modifierKind": [125, 148],
+          "required": true
+        }
+      ],
+      "outputsClass": [
+        {
+          "name": "clickEvent",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 16,
+          "modifierKind": [125],
+          "required": false
+        }
+      ],
+      "propertiesClass": [
+        {
+          "name": "clickEvent",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 16,
+          "modifierKind": [125],
+          "required": false
+        },
+        {
+          "name": "customStyles",
+          "defaultValue": "input<string>('')",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 15,
+          "modifierKind": [125, 148]
+        },
+        {
+          "name": "disabled",
+          "defaultValue": "false",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 12,
+          "modifierKind": [125, 148],
+          "required": false
+        },
+        {
+          "name": "title",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 14,
+          "modifierKind": [125, 148],
+          "required": true
+        },
+        {
+          "name": "variant",
+          "defaultValue": "input<'primary' | 'secondary' | 'tertiary'>('primary')",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 13,
+          "modifierKind": [125, 148]
+        }
+      ],
+      "methodsClass": [
+        {
+          "name": "handleClick",
+          "args": [
+            {
+              "name": "event",
+              "type": "Event",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 18,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "modifierKind": [124],
+          "jsdoctags": [
+            {
+              "name": "event",
+              "type": "Event",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        }
+      ],
+      "deprecated": false,
+      "deprecationMessage": "",
+      "hostBindings": [],
+      "hostListeners": [],
+      "standalone": true,
+      "imports": [
+        {
+          "name": "CommonModule",
+          "type": "module"
+        }
+      ],
+      "description": "",
+      "rawdescription": "\n",
+      "type": "component",
+      "sourceCode": "import { CommonModule } from '@angular/common';\nimport { ChangeDetectionStrategy, Component, input, output } from '@angular/core';\n\n@Component({\n  selector: 'app-button',\n  standalone: true,\n  imports: [CommonModule],\n  templateUrl: './button.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ButtonComponent {\n  public readonly disabled = input<boolean>(false);\n  public readonly variant = input<'primary' | 'secondary' | 'tertiary'>('primary');\n  public readonly title = input.required<string>();\n  public readonly customStyles = input<string>('');\n  public clickEvent = output<Event>();\n\n  protected handleClick(event: Event) {\n    this.clickEvent.emit(event);\n  }\n}\n",
+      "assetsDirs": [],
+      "styleUrlsData": "",
+      "stylesData": "",
+      "extends": [],
+      "templateData": "<button\n  [title]=\"title()\"\n  (click)=\"handleClick($event)\"\n  class=\"py-2 px-6 rounded-md font-bold text-sm duration-300 disabled:cursor-not-allowed\"\n  [class]=\"customStyles()\"\n  [ngClass]=\"{\n    'bg-inactive disabled:text-active cursor-not-allowed': disabled() && variant() === 'primary',\n    'bg-transparent border-[2px] border-inactive text-inactive cursor-not-allowed':\n      disabled() && variant() === 'secondary',\n    'disabled:text-inactive': disabled() && variant() === 'tertiary',\n\n    'bg-primary text-[#342721] hover:bg-hover active:bg-active':\n      !disabled() && variant() === 'primary',\n    'bg-transparent border-2 border-primary text-[#342721] hover:bg-[#e8e5d9] hover:border-hover active:bg-hover active:border-active':\n      !disabled() && variant() === 'secondary',\n    'bg-transparent hover:text-[#826a4c] active:text-[#4e3e35]':\n      !disabled() && variant() === 'tertiary',\n  }\"\n  [disabled]=\"disabled()\"\n>\n  <ng-content></ng-content>\n</button>\n"
+    },
+    {
+      "name": "ToastComponent",
+      "id": "component-ToastComponent-165bfcbf5cac4b59d68008af5a749338f553d6ac414773ebebcbbc56a755e3e45326567fbd53c8069c71a75c6a261d12dfe1826f251ee366a66e2250f9a25af7",
+      "file": "src/libs/components/toast/toast.component.ts",
+      "changeDetection": "ChangeDetectionStrategy.OnPush",
+      "encapsulation": [],
+      "entryComponents": [],
+      "inputs": [],
+      "outputs": [],
+      "providers": [],
+      "selector": "app-toast",
+      "styleUrls": [],
+      "styles": [],
+      "templateUrl": ["./toast.component.html"],
+      "viewProviders": [],
+      "hostDirectives": [],
+      "inputsClass": [],
+      "outputsClass": [],
+      "propertiesClass": [
+        {
+          "name": "icons",
+          "defaultValue": "{ X }",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "object",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 15,
+          "modifierKind": [124, 148]
+        },
+        {
+          "name": "toasts",
+          "defaultValue": "signal<Toast[]>([])",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "indexKey": "",
+          "optional": false,
+          "description": "",
+          "line": 16,
+          "modifierKind": [124, 148]
+        }
+      ],
+      "methodsClass": [
+        {
+          "name": "addMessage",
+          "args": [
+            {
+              "name": "toast",
+              "type": "Omit<Toast | id>",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 18,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "modifierKind": [125],
+          "jsdoctags": [
+            {
+              "name": "toast",
+              "type": "Omit<Toast | id>",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        },
+        {
+          "name": "removeToast",
+          "args": [
+            {
+              "name": "id",
+              "type": "number",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "optional": false,
+          "returnType": "void",
+          "typeParameters": [],
+          "line": 25,
+          "deprecated": false,
+          "deprecationMessage": "",
+          "modifierKind": [125],
+          "jsdoctags": [
+            {
+              "name": "id",
+              "type": "number",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        }
+      ],
+      "deprecated": false,
+      "deprecationMessage": "",
+      "hostBindings": [],
+      "hostListeners": [],
+      "standalone": true,
+      "imports": [
+        {
+          "name": "CommonModule",
+          "type": "module"
+        },
+        {
+          "name": "LucideAngularModule",
+          "type": "module"
+        },
+        {
+          "name": "ButtonComponent",
+          "type": "component"
+        }
+      ],
+      "description": "",
+      "rawdescription": "\n",
+      "type": "component",
+      "sourceCode": "import { CommonModule } from '@angular/common';\nimport { ChangeDetectionStrategy, Component, signal } from '@angular/core';\nimport { Toast } from '@shared/models/toast';\nimport { LucideAngularModule, X } from 'lucide-angular';\nimport { ButtonComponent } from '../button/button.component';\n\n@Component({\n  selector: 'app-toast',\n  standalone: true,\n  imports: [CommonModule, LucideAngularModule, ButtonComponent],\n  templateUrl: './toast.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ToastComponent {\n  protected readonly icons = { X };\n  protected readonly toasts = signal<Toast[]>([]);\n\n  public addMessage(toast: Omit<Toast, 'id'>) {\n    const id = Date.now();\n    this.toasts.update((prev) => [...prev, { ...toast, id }]);\n\n    setTimeout(() => this.removeToast(id), 5000);\n  }\n\n  public removeToast(id: number) {\n    this.toasts.update((prev) => prev.filter((toast) => toast.id !== id));\n  }\n}\n",
+      "assetsDirs": [],
+      "styleUrlsData": "",
+      "stylesData": "",
+      "extends": [],
+      "templateData": "<div class=\"fixed top-4 right-4 z-50 space-y-2 w-96\">\n  @for (toast of toasts(); track $index) {\n    <div\n      class=\"relative p-3 flex gap-3 border-b-4 rounded shadow text-toast-typo-1 text-sm mb-2\"\n      [class]=\"toast.actions ? 'items-start' : 'items-center'\"\n      [ngClass]=\"{\n        'border-b-green-600': toast.type === 'success',\n        'border-b-red-600': toast.type === 'error',\n        'border-b-blue-600': toast.type === 'info',\n        'border-b-yellow-500': toast.type === 'warning',\n      }\"\n    >\n      @if (toast.triggerBy) {\n        <img\n          [src]=\"toast.triggerBy.imageSrc\"\n          alt=\"profile-image-of-{{ toast?.triggerBy?.name }}\"\n          class=\"rounded-full w-12 h-12\"\n        />\n      }\n\n      <div class=\"flex flex-col gap-2\">\n        <div class=\"flex flex-col gap-1\">\n          <p>\n            {{ toast.title }}\n          </p>\n          @if (toast.message) {\n            <p class=\"text-muted\">\n              {{ toast.message }}\n            </p>\n          }\n        </div>\n\n        @if (toast.actions?.length) {\n          <div class=\"flex items-center gap-4\">\n            @for (action of toast.actions; track $index) {\n              <button\n                class=\"px-3 py-1 rounded-md capitalize text-white\"\n                [class]=\"$first ? '' : 'border-2'\"\n                [ngClass]=\"{\n                  'bg-green-600': toast.type === 'success' && $first,\n                  'bg-red-600': toast.type === 'error' && $first,\n                  'bg-blue-600': toast.type === 'info' && $first,\n                  'bg-yellow-500': toast.type === 'warning' && $first,\n\n                  'text-green-600  border-green-600': toast.type === 'success' && !$first,\n                  'text-red-600 border-red-600': toast.type === 'error' && !$first,\n                  'text-blue-600 border-blue-600': toast.type === 'info' && !$first,\n                  'text-yellow-600 border-yellow-500': toast.type === 'warning' && !$first,\n                }\"\n                (click)=\"(action.onClick)\"\n              >\n                {{ action.label }}\n              </button>\n            }\n          </div>\n        }\n      </div>\n\n      <app-button\n        title=\"Close Toast\"\n        variant=\"tertiary\"\n        customStyles=\"absolute right-5 top-2 !p-1 w-0\"\n        (clickEvent)=\"removeToast(toast.id)\"\n        ><lucide-icon [img]=\"icons.X\" [size]=\"13\" color=\"#000\"\n      /></app-button>\n    </div>\n  }\n</div>\n"
+    }
+  ],
+  "modules": [],
+  "miscellaneous": {
+    "variables": [
+      {
+        "name": "appConfig",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/admin/src/app/app.config.server.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "object",
+        "defaultValue": "{\n  ...baseConfig,\n  providers: [...(baseConfig.providers || []), provideServerRendering()],\n}"
+      },
+      {
+        "name": "appConfig",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/admin/src/app/app.config.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "ApplicationConfig",
+        "defaultValue": "{\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideClientHydration(),\n    provideHttpClient(),\n    provideRouter(routes),\n    provideStore(),\n    provideEffects(),\n    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),\n  ],\n}"
+      },
+      {
+        "name": "appConfig",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/patient/src/app/app.config.server.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "object",
+        "defaultValue": "{\n  ...baseConfig,\n  providers: [...(baseConfig.providers || []), provideServerRendering()],\n}"
+      },
+      {
+        "name": "appConfig",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/patient/src/app/app.config.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "ApplicationConfig",
+        "defaultValue": "{\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideClientHydration(),\n    provideHttpClient(),\n    provideRouter(routes),\n    provideStore(),\n    provideEffects(),\n    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),\n  ],\n}"
+      },
+      {
+        "name": "appConfig",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/provider/src/app/app.config.server.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "object",
+        "defaultValue": "{\n  ...baseConfig,\n  providers: [...(baseConfig.providers || []), provideServerRendering()],\n}"
+      },
+      {
+        "name": "appConfig",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/provider/src/app/app.config.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "ApplicationConfig",
+        "defaultValue": "{\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideClientHydration(),\n    provideHttpClient(),\n    provideRouter(routes),\n    provideStore(),\n    provideEffects(),\n    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),\n  ],\n}"
+      },
+      {
+        "name": "indexHtml",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/admin/src/main.server.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "readFileSync(join(__dirname, 'index.html'), 'utf8')"
+      },
+      {
+        "name": "indexHtml",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/patient/src/main.server.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "readFileSync(join(__dirname, 'index.html'), 'utf8')"
+      },
+      {
+        "name": "indexHtml",
+        "ctype": "miscellaneous",
+        "subtype": "variable",
+        "file": "src/apps/provider/src/main.server.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "type": "",
+        "defaultValue": "readFileSync(join(__dirname, 'index.html'), 'utf8')"
+      }
+    ],
+    "functions": [
+      {
+        "name": "render",
+        "file": "src/apps/admin/src/main.server.ts",
+        "ctype": "miscellaneous",
+        "subtype": "function",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "description": "",
+        "args": [
+          {
+            "name": "url",
+            "type": "string",
+            "deprecated": false,
+            "deprecationMessage": ""
+          },
+          {
+            "name": "_options",
+            "type": "any",
+            "deprecated": false,
+            "deprecationMessage": ""
+          }
+        ],
+        "jsdoctags": [
+          {
+            "name": "url",
+            "type": "string",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "tagName": {
+              "text": "param"
+            }
+          },
+          {
+            "name": "_options",
+            "type": "any",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "tagName": {
+              "text": "param"
+            }
+          }
+        ]
+      },
+      {
+        "name": "render",
+        "file": "src/apps/patient/src/main.server.ts",
+        "ctype": "miscellaneous",
+        "subtype": "function",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "description": "",
+        "args": [
+          {
+            "name": "url",
+            "type": "string",
+            "deprecated": false,
+            "deprecationMessage": ""
+          },
+          {
+            "name": "_options",
+            "type": "any",
+            "deprecated": false,
+            "deprecationMessage": ""
+          }
+        ],
+        "jsdoctags": [
+          {
+            "name": "url",
+            "type": "string",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "tagName": {
+              "text": "param"
+            }
+          },
+          {
+            "name": "_options",
+            "type": "any",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "tagName": {
+              "text": "param"
+            }
+          }
+        ]
+      },
+      {
+        "name": "render",
+        "file": "src/apps/provider/src/main.server.ts",
+        "ctype": "miscellaneous",
+        "subtype": "function",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "description": "",
+        "args": [
+          {
+            "name": "url",
+            "type": "string",
+            "deprecated": false,
+            "deprecationMessage": ""
+          },
+          {
+            "name": "_options",
+            "type": "any",
+            "deprecated": false,
+            "deprecationMessage": ""
+          }
+        ],
+        "jsdoctags": [
+          {
+            "name": "url",
+            "type": "string",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "tagName": {
+              "text": "param"
+            }
+          },
+          {
+            "name": "_options",
+            "type": "any",
+            "deprecated": false,
+            "deprecationMessage": "",
+            "tagName": {
+              "text": "param"
+            }
+          }
+        ]
+      }
+    ],
+    "typealiases": [
+      {
+        "name": "ToastType",
+        "ctype": "miscellaneous",
+        "subtype": "typealias",
+        "rawtype": "\"success\" | \"error\" | \"info\" | \"warning\"",
+        "file": "src/libs/models/toast.ts",
+        "deprecated": false,
+        "deprecationMessage": "",
+        "description": "",
+        "kind": 192
+      }
+    ],
+    "enumerations": [],
+    "groupedVariables": {
+      "src/apps/admin/src/app/app.config.server.ts": [
+        {
+          "name": "appConfig",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/admin/src/app/app.config.server.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "object",
+          "defaultValue": "{\n  ...baseConfig,\n  providers: [...(baseConfig.providers || []), provideServerRendering()],\n}"
+        }
+      ],
+      "src/apps/admin/src/app/app.config.ts": [
+        {
+          "name": "appConfig",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/admin/src/app/app.config.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ApplicationConfig",
+          "defaultValue": "{\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideClientHydration(),\n    provideHttpClient(),\n    provideRouter(routes),\n    provideStore(),\n    provideEffects(),\n    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),\n  ],\n}"
+        }
+      ],
+      "src/apps/patient/src/app/app.config.server.ts": [
+        {
+          "name": "appConfig",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/patient/src/app/app.config.server.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "object",
+          "defaultValue": "{\n  ...baseConfig,\n  providers: [...(baseConfig.providers || []), provideServerRendering()],\n}"
+        }
+      ],
+      "src/apps/patient/src/app/app.config.ts": [
+        {
+          "name": "appConfig",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/patient/src/app/app.config.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ApplicationConfig",
+          "defaultValue": "{\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideClientHydration(),\n    provideHttpClient(),\n    provideRouter(routes),\n    provideStore(),\n    provideEffects(),\n    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),\n  ],\n}"
+        }
+      ],
+      "src/apps/provider/src/app/app.config.server.ts": [
+        {
+          "name": "appConfig",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/provider/src/app/app.config.server.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "object",
+          "defaultValue": "{\n  ...baseConfig,\n  providers: [...(baseConfig.providers || []), provideServerRendering()],\n}"
+        }
+      ],
+      "src/apps/provider/src/app/app.config.ts": [
+        {
+          "name": "appConfig",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/provider/src/app/app.config.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "ApplicationConfig",
+          "defaultValue": "{\n  providers: [\n    provideZoneChangeDetection({ eventCoalescing: true }),\n    provideClientHydration(),\n    provideHttpClient(),\n    provideRouter(routes),\n    provideStore(),\n    provideEffects(),\n    provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),\n  ],\n}"
+        }
+      ],
+      "src/apps/admin/src/main.server.ts": [
+        {
+          "name": "indexHtml",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/admin/src/main.server.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "readFileSync(join(__dirname, 'index.html'), 'utf8')"
+        }
+      ],
+      "src/apps/patient/src/main.server.ts": [
+        {
+          "name": "indexHtml",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/patient/src/main.server.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "readFileSync(join(__dirname, 'index.html'), 'utf8')"
+        }
+      ],
+      "src/apps/provider/src/main.server.ts": [
+        {
+          "name": "indexHtml",
+          "ctype": "miscellaneous",
+          "subtype": "variable",
+          "file": "src/apps/provider/src/main.server.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "type": "",
+          "defaultValue": "readFileSync(join(__dirname, 'index.html'), 'utf8')"
+        }
+      ]
+    },
+    "groupedFunctions": {
+      "src/apps/admin/src/main.server.ts": [
+        {
+          "name": "render",
+          "file": "src/apps/admin/src/main.server.ts",
+          "ctype": "miscellaneous",
+          "subtype": "function",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "description": "",
+          "args": [
+            {
+              "name": "url",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": ""
+            },
+            {
+              "name": "_options",
+              "type": "any",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "jsdoctags": [
+            {
+              "name": "url",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            },
+            {
+              "name": "_options",
+              "type": "any",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        }
+      ],
+      "src/apps/patient/src/main.server.ts": [
+        {
+          "name": "render",
+          "file": "src/apps/patient/src/main.server.ts",
+          "ctype": "miscellaneous",
+          "subtype": "function",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "description": "",
+          "args": [
+            {
+              "name": "url",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": ""
+            },
+            {
+              "name": "_options",
+              "type": "any",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "jsdoctags": [
+            {
+              "name": "url",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            },
+            {
+              "name": "_options",
+              "type": "any",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        }
+      ],
+      "src/apps/provider/src/main.server.ts": [
+        {
+          "name": "render",
+          "file": "src/apps/provider/src/main.server.ts",
+          "ctype": "miscellaneous",
+          "subtype": "function",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "description": "",
+          "args": [
+            {
+              "name": "url",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": ""
+            },
+            {
+              "name": "_options",
+              "type": "any",
+              "deprecated": false,
+              "deprecationMessage": ""
+            }
+          ],
+          "jsdoctags": [
+            {
+              "name": "url",
+              "type": "string",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            },
+            {
+              "name": "_options",
+              "type": "any",
+              "deprecated": false,
+              "deprecationMessage": "",
+              "tagName": {
+                "text": "param"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "groupedEnumerations": {},
+    "groupedTypeAliases": {
+      "src/libs/models/toast.ts": [
+        {
+          "name": "ToastType",
+          "ctype": "miscellaneous",
+          "subtype": "typealias",
+          "rawtype": "\"success\" | \"error\" | \"info\" | \"warning\"",
+          "file": "src/libs/models/toast.ts",
+          "deprecated": false,
+          "deprecationMessage": "",
+          "description": "",
+          "kind": 192
+        }
+      ]
+    }
+  },
+  "routes": [],
+  "coverage": {
+    "count": 0,
+    "status": "low",
+    "files": [
+      {
+        "filePath": "src/apps/admin/src/app/app.component.ts",
+        "type": "component",
+        "linktype": "component",
+        "name": "AppComponent",
+        "coveragePercent": 0,
+        "coverageCount": "0/4",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/admin/src/app/app.config.server.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "appConfig",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/admin/src/app/app.config.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "appConfig",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/admin/src/main.server.ts",
+        "type": "function",
+        "linktype": "miscellaneous",
+        "linksubtype": "function",
+        "name": "render",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/admin/src/main.server.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "indexHtml",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/patient/src/app/app.component.ts",
+        "type": "component",
+        "linktype": "component",
+        "name": "AppComponent",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/patient/src/app/app.config.server.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "appConfig",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/patient/src/app/app.config.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "appConfig",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/patient/src/main.server.ts",
+        "type": "function",
+        "linktype": "miscellaneous",
+        "linksubtype": "function",
+        "name": "render",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/patient/src/main.server.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "indexHtml",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/provider/src/app/app.component.ts",
+        "type": "component",
+        "linktype": "component",
+        "name": "AppComponent",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/provider/src/app/app.config.server.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "appConfig",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/provider/src/app/app.config.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "appConfig",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/provider/src/main.server.ts",
+        "type": "function",
+        "linktype": "miscellaneous",
+        "linksubtype": "function",
+        "name": "render",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/apps/provider/src/main.server.ts",
+        "type": "variable",
+        "linktype": "miscellaneous",
+        "linksubtype": "variable",
+        "name": "indexHtml",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      },
+      {
+        "filePath": "src/libs/components/button/button.component.ts",
+        "type": "component",
+        "linktype": "component",
+        "name": "ButtonComponent",
+        "coveragePercent": 0,
+        "coverageCount": "0/10",
+        "status": "low"
+      },
+      {
+        "filePath": "src/libs/components/toast/toast.component.ts",
+        "type": "component",
+        "linktype": "component",
+        "name": "ToastComponent",
+        "coveragePercent": 0,
+        "coverageCount": "0/5",
+        "status": "low"
+      },
+      {
+        "filePath": "src/libs/core/services/toast/toast.service.ts",
+        "type": "injectable",
+        "linktype": "injectable",
+        "name": "ToastService",
+        "coveragePercent": 0,
+        "coverageCount": "0/4",
+        "status": "low"
+      },
+      {
+        "filePath": "src/libs/models/toast.ts",
+        "type": "interface",
+        "linktype": "interface",
+        "name": "Toast",
+        "coveragePercent": 0,
+        "coverageCount": "0/7",
+        "status": "low"
+      },
+      {
+        "filePath": "src/libs/models/toast.ts",
+        "type": "interface",
+        "linktype": "interface",
+        "name": "ToastAction",
+        "coveragePercent": 0,
+        "coverageCount": "0/3",
+        "status": "low"
+      },
+      {
+        "filePath": "src/libs/models/toast.ts",
+        "type": "type alias",
+        "linktype": "miscellaneous",
+        "linksubtype": "typealias",
+        "name": "ToastType",
+        "coveragePercent": 0,
+        "coverageCount": "0/1",
+        "status": "low"
+      }
+    ]
+  }
+}

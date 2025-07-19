@@ -1,0 +1,40 @@
+# #!/usr/bin/env bash
+# . "$(dirname -- "$0")/_/husky.sh"
+
+echo "Running pre-commit checks..."
+
+# Get staged TypeScript files
+STAGED_TS_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.ts$' || true)
+
+# If there's a .precommitignore file, use it to filter out unwanted files
+if [ -f .precommitignore ]; then
+  echo "Applying .precommitignore filters..."
+  while read -r pattern; do
+    # Skip empty lines or comments
+    [ -z "$pattern" ] && continue
+    [[ $pattern =~ ^# ]] && continue
+    STAGED_TS_FILES=$(echo "$STAGED_TS_FILES" | grep -v -E "$pattern" || true)
+  done < .precommitignore
+fi
+
+# Run tests if we still have files left
+# if [ -n "$STAGED_TS_FILES" ]; then
+#   echo "Running related tests..."
+#   if npm test -- --findRelatedTests --passWithNoTests $STAGED_TS_FILES; then
+#     echo "Tests passed!"
+#   else
+#     echo "Tests failed. Please fix the issues before committing."
+#     exit 1
+#   fi
+# else
+#   echo "No testable TS files after filtering, skipping tests."
+# fi
+
+# Linting and formatting
+echo "Running linting and formatting..."
+npx lint-staged || {
+  echo "Code quality checks failed. Please fix the issues before committing."
+  exit 1
+}
+
+echo "Pre-commit checks completed successfully!"

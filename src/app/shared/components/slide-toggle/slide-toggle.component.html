@@ -1,0 +1,18 @@
+<button
+  type="button"
+  class="focus:outline-none"
+  [class]="getVariantClasses().track"
+  (click)="toggle()"
+  [ngClass]="{ 'cursor-not-allowed': disabled() }"
+>
+  <span class="block" [class]="getVariantClasses().thumb">
+    @if (getVariantClasses().showIcon) {
+      <lucide-icon
+        [strokeWidth]="5"
+        [class]="isOn() ? 'text-primary-gray' : 'text-secondary-gray'"
+        class="w-[0.75rem] h-[0.75rem]"
+        [img]="getIcon()"
+      ></lucide-icon>
+    }
+  </span>
+</button>

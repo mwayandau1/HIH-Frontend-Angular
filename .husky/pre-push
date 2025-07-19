@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+echo "Running pre-push checks..."
+
+# Lint
+echo " Running lint..."
+npm run lint
+LINT_EXIT_CODE=$?
+
+# Test changed files
+echo "Running tests for changed files..."
+npm run test:changed
+CHANGED_TESTS_EXIT_CODE=$?
+
+# Conditionally run full coverage with thresholds
+echo "Checking if TS files changed for coverage check..."
+if git diff origin/develop...HEAD --name-only | grep -E '\.(ts|tsx)$' > /dev/null; then
+  echo "Running full tests with coverage (enforcing threshold)..."
+  npx jest --coverage --coverageThreshold='{"global": {"statements":75,"branches":75,"lines":75,"functions":75}}'
+  FULL_COVERAGE_EXIT_CODE=$?
+else
+  echo " No TS file changes detected. Skipping full coverage check."
+  FULL_COVERAGE_EXIT_CODE=0
+fi
+
+# Build
+echo "Running build..."
+npm run build
+BUILD_EXIT_CODE=$?
+
+# Check all results
+if [ $LINT_EXIT_CODE -ne 0 ] || [ $CHANGED_TESTS_EXIT_CODE -ne 0 ] || [ $FULL_COVERAGE_EXIT_CODE -ne 0 ] || [ $BUILD_EXIT_CODE -ne 0 ]; then
+  echo "Pre-push checks failed. Fix the issues before pushing."
+  exit 1
+fi
+
+echo "All checks passed. Push allowed."
+exit 0

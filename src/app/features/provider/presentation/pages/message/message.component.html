@@ -1,0 +1,127 @@
+<main class="px-4 md:px-10 lg:px-10 my-8 w-full">
+  <h1 class="font-bold text-2xl 2xl:text-3xl">Secure Messaging</h1>
+  <p>Communicate securely with patients and team members</p>
+
+  <section class="flex justify-between">
+    <div class="w-[40%] flex flex-col">
+      <app-input
+        id="patient-search-field"
+        placeholder="Search patients..."
+        [hasIcon]="true"
+        [control]="searchKeyword"
+        (keyEvent)="handleSearch('rooms')"
+        iconPosition="left"
+      >
+        <lucide-icon [img]="icons.Search" [size]="18" color="#7c7c7c" />
+      </app-input>
+
+      <div>
+        @if (isFetchingRooms()) {
+          <div class="flex justify-center items-center mt-16">
+            <app-loader />
+          </div>
+        } @else {
+          @if (userRooms().length > 0) {
+            @for (room of userRooms(); track $index) {
+              <div
+                class="border-l-4"
+                [ngClass]="{
+                  'bg-tertiary border-l-4 border-l-custom-brown': selectedRoom()?.id === room.id,
+                  'border-l-transparent': selectedRoom()?.id !== room.id,
+                }"
+              >
+                <app-button
+                  title="{{ room.participants[1].userName }}"
+                  variant="tertiary"
+                  customStyles="!p-0 !w-full"
+                  (clickEvent)="selectRoom(room.id)"
+                >
+                  <div
+                    class="px-1 py-6 flex gap-4 items-center border-primary w-full"
+                    [class.border-b]="!$last"
+                  >
+                    <div
+                      class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-secondary-black text-sm font-bold"
+                    >
+                      {{
+                        getInitials(
+                          room.participants[1].userName.split(' ')[0],
+                          room.participants[1].userName.split(' ')[1]
+                        )
+                      }}
+                    </div>
+                    <p>{{ room.participants[1].userName }}</p>
+                  </div>
+                </app-button>
+              </div>
+            }
+          } @else {
+            <div class="my-4 justify-center items-center">
+              <p>No Chat Rooms Available</p>
+            </div>
+          }
+        }
+      </div>
+      <div class="w-full mt-auto">
+        <app-button
+          variant="secondary"
+          customStyles="!w-full"
+          title="new-message-btn"
+          (clickEvent)="handleOpenModal()"
+        >
+          <span class="mr-2">
+            <lucide-icon [img]="icons.UserPlus" [size]="20" color="#342721" />
+          </span>
+          <p>New Message</p>
+        </app-button>
+      </div>
+    </div>
+    <div class="w-[55%]">
+      <router-outlet />
+    </div>
+  </section>
+</main>
+
+<app-modal title="" [isOpen]="isModalOpen()" (closeModal)="handleCloseModal()">
+  @if (isFetchingUsers()) {
+    <div class="flex justify-center items-center my-6">
+      <app-loader />
+    </div>
+  } @else {
+    <div class="flex h-[70vh]">
+      <div class="flex-1 overflow-y-auto">
+        <app-input
+          id="patient-search-field"
+          placeholder="Search patients..."
+          [hasIcon]="true"
+          [control]="searchKeyword"
+          (keyEvent)="handleSearch('users')"
+          iconPosition="left"
+        >
+          <lucide-icon [img]="icons.Search" [size]="18" color="#7c7c7c" />
+        </app-input>
+
+        @for (user of allUsers(); track $index) {
+          <app-button
+            title="{{ user.firstName }}-{{ user.lastName }}"
+            variant="tertiary"
+            customStyles="!p-0 !w-full"
+            (clickEvent)="handleStartConvo(user.id)"
+          >
+            <div
+              class="px-1 py-6 flex gap-4 items-center border-primary w-full"
+              [class.border-b]="!$last"
+            >
+              <div
+                class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-secondary-black text-sm font-bold"
+              >
+                {{ getInitials(user.firstName, user.lastName) }}
+              </div>
+              <p>{{ user.firstName }} {{ user.lastName }}</p>
+            </div>
+          </app-button>
+        }
+      </div>
+    </div>
+  }
+</app-modal>
